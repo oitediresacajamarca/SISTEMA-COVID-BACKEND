@@ -16,7 +16,9 @@
    ],
    "subscribers": [
       "src/subscriber/**/*.ts"
-   ]   
+   ],  
+   "connectionTimeout": 300000,
+   "requestTimeout": 300000
 
 
 }

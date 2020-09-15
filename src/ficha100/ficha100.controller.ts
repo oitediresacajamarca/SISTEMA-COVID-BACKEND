@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { Ficha100Service } from './ficha100.service';
 
-@Controller('ficha100')
+@Controller('covid/ficha100')
 export class Ficha100Controller {
 
     constructor(private ficha100s:Ficha100Service){}

@@ -43,7 +43,7 @@ export class CrucesService {
     }
 
     async devolverDnisCrusados() {
-        const respuesta = await this.crucesdni.find({take:10000})
+        const respuesta = await this.crucesdni.find()
         const resp = respuesta.map((datos, index) => {
 
             let fichadef = { existe: false, clase: 'bg-danger' }

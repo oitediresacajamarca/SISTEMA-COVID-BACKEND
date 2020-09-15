@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { CrucesService } from './cruces.service';
 
 
-@Controller('cruces')
+@Controller('covid/cruces')
 export class CrucesController {
     constructor(private cruces: CrucesService) {
 

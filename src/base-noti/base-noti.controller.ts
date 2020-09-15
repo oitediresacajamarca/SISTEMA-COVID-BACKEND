@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { BaseNotiService } from './base-noti.service';
 
-@Controller('base-noti')
+@Controller('covid/base-noti')
 export class BaseNotiController {
     constructor(private basenotis: BaseNotiService) {
 
