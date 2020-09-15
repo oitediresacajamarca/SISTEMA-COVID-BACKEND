@@ -1,0 +1,22 @@
+{ 
+    
+   "type": "mssql",
+   "host": "localhost",
+   "port": 1433,
+   "username": "sa",
+   "password": ".",
+   "database": "DIR_STG_SISCOVID",
+   "synchronize": false,
+   "logging": false,
+   "entities": [
+      "dist/**/*{.ts,.js}"
+   ],
+   "migrations": [
+      "src/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ]   
+
+
+}
