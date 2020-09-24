@@ -13,6 +13,7 @@ import { DatosGeneralesModule } from './datos-generales/datos-generales.module';
 import { DniCrucesModule } from './dni-cruces/dni-cruces.module';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 import { join } from 'path';
+import { EquipoCovidModule } from './equipo-covid/equipo-covid.module';
 
 
 @Module({
@@ -21,7 +22,8 @@ import { join } from 'path';
     Ficha300Module, CrucesModule, DatosGeneralesModule, DniCrucesModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '/', 'seguimiento'),
-    }),],
+    }),
+    EquipoCovidModule,],
   
   controllers: [AppController],
   providers: [AppService],
