@@ -127,5 +127,7 @@ export class BaseNotiEntity {
     secuenciamiento:string; @Column()
     asintomatico:string; @Column()
     investigador:string; @Column()
-    usuario_reg:string
+    usuario_reg:string;
+    @Column()
+    fecha_reg:Date
 }

@@ -7,6 +7,7 @@ import { Ficha100Controller } from './ficha100.controller';
 @Module({
   providers: [Ficha100Service],
   imports:[TypeOrmModule.forFeature([Ficha100Repository])],
-  controllers: [Ficha100Controller]
+  controllers: [Ficha100Controller],
+  exports:[Ficha100Service]
 })
 export class Ficha100Module {}

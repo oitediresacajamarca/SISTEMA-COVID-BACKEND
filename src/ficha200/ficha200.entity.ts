@@ -261,5 +261,6 @@ export class Ficha200Entity {
     @Column()
     id_ubigeo: string;
     @Column()
-    cod_establecimiento: string
+    cod_establecimiento: string;
+   
 }

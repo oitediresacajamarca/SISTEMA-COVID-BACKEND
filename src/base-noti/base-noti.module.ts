@@ -7,7 +7,8 @@ import { BaseNotiService } from './base-noti.service';
 @Module({
 imports:[TypeOrmModule.forFeature([BaseNotiRepository])],
 controllers: [BaseNotiController],
-providers: [BaseNotiService]
+providers: [BaseNotiService],
+exports:[BaseNotiService]
 
 
 })

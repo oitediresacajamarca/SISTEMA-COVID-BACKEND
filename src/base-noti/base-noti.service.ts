@@ -9,7 +9,7 @@ export class BaseNotiService {
     }
 
     async devolverTodos() {
-        const resp = await this.basenotiRep.find()
+        const resp = await this.basenotiRep.find({take:200})
         return resp
     }
 

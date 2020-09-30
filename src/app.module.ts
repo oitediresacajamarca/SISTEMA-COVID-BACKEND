@@ -14,6 +14,8 @@ import { DniCrucesModule } from './dni-cruces/dni-cruces.module';
 import { ServeStaticModule } from '@nestjs/serve-static/dist/serve-static.module';
 import { join } from 'path';
 import { EquipoCovidModule } from './equipo-covid/equipo-covid.module';
+import { AuthModule } from './auth/auth.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 
 @Module({
@@ -21,9 +23,11 @@ import { EquipoCovidModule } from './equipo-covid/equipo-covid.module';
     Ficha00Module, Ficha100Module, Ficha200Module, 
     Ficha300Module, CrucesModule, DatosGeneralesModule, DniCrucesModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '/', 'seguimiento'),
+      rootPath: join(__dirname, '..', 'seguimiento'),
     }),
-    EquipoCovidModule,],
+    EquipoCovidModule,
+    AuthModule,
+    UsuariosModule,],
   
   controllers: [AppController],
   providers: [AppService],
