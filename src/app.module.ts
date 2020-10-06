@@ -17,17 +17,22 @@ import { EquipoCovidModule } from './equipo-covid/equipo-covid.module';
 import { AuthModule } from './auth/auth.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 
+import { HeatmapModule } from './heatmap/heatmap.module';
+import { UbigeosDistritosModule } from './ubigeos-distritos/ubigeos-distritos.module';
+import { NoGeoreferenciadosModule } from './no-georeferenciados/no-georeferenciados.module';
+
 
 @Module({
   imports: [BaseNotiModule, DatabaseModule,TypeOrmModule.forRoot(), 
     Ficha00Module, Ficha100Module, Ficha200Module, 
-    Ficha300Module, CrucesModule, DatosGeneralesModule, DniCrucesModule,
+    Ficha300Module, CrucesModule, DatosGeneralesModule, DniCrucesModule,HeatmapModule,UbigeosDistritosModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'seguimiento'),
     }),
     EquipoCovidModule,
     AuthModule,
-    UsuariosModule,],
+    UsuariosModule,
+    NoGeoreferenciadosModule,],
   
   controllers: [AppController],
   providers: [AppService],
