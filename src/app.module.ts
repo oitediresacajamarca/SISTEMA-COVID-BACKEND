@@ -20,6 +20,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { HeatmapModule } from './heatmap/heatmap.module';
 import { UbigeosDistritosModule } from './ubigeos-distritos/ubigeos-distritos.module';
 import { NoGeoreferenciadosModule } from './no-georeferenciados/no-georeferenciados.module';
+import { MedicamentosModule } from './medicamentos/medicamentos.module';
 
 
 @Module({
@@ -32,7 +33,8 @@ import { NoGeoreferenciadosModule } from './no-georeferenciados/no-georeferencia
     EquipoCovidModule,
     AuthModule,
     UsuariosModule,
-    NoGeoreferenciadosModule,],
+    NoGeoreferenciadosModule,
+    MedicamentosModule,],
   
   controllers: [AppController],
   providers: [AppService],
