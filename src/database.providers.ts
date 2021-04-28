@@ -10,7 +10,7 @@ export const databaseProviders = [
         "host": "172.18.20.27",
         "port": 1433,
         "username": "sa",
-        "password": "P4ssw0rd123",
+        "password": "Intercambio1080",
         "database": "risc_2030",
         "synchronize": false,
         "logging": false,
