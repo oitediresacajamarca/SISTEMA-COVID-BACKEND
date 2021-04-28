@@ -8,4 +8,10 @@ export class UbigeosDistritosService {
         const resp = await this.usr.findOne({ where: { COD_UBIGEO: COD_DISTRITO } })
         return resp;
     }
+
+    async devolver_distritos(NONMBRE_PROVINCIA) {
+
+        const resp = await this.usr.find({ where: { PROVINCIA: NONMBRE_PROVINCIA } })
+        return resp;
+    }
 }

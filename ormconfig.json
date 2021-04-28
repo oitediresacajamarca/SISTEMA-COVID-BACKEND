@@ -1,4 +1,4 @@
-{ 
+[{ 
     
    "type": "mssql",
    "host": "localhost",
@@ -21,4 +21,26 @@
    "requestTimeout": 300000
 
 
+},
+{ "type": "mssql",
+   "host": "localhost",
+   "port": 1433,
+   "username": "sa",
+   "password": "p",
+   "database": "BD_VACUNACION_COVID",
+   "synchronize": false,
+   "logging": false,
+   "entities": [
+      "dist/**/*{.ts,.js}"
+   ],
+   "migrations": [
+      "src/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ],  
+   "connectionTimeout": 300000,
+   "requestTimeout": 300000
 }
+
+]

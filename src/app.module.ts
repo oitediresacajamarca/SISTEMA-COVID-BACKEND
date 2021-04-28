@@ -16,17 +16,22 @@ import { join } from 'path';
 import { EquipoCovidModule } from './equipo-covid/equipo-covid.module';
 import { AuthModule } from './auth/auth.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
-
 import { HeatmapModule } from './heatmap/heatmap.module';
 import { UbigeosDistritosModule } from './ubigeos-distritos/ubigeos-distritos.module';
 import { NoGeoreferenciadosModule } from './no-georeferenciados/no-georeferenciados.module';
 import { MedicamentosModule } from './medicamentos/medicamentos.module';
+import { HisMinsaModule } from './his-minsa/his-minsa.module';
+import { PadronVacunadosModule } from './padron-vacunados/padron-vacunados.module';
+import { PuntoVacunacionModule } from './punto-vacunacion/punto-vacunacion.module';
+import { VacunacionCitaModule } from './vacunacion-cita/vacunacion-cita.module';
 
 
 @Module({
-  imports: [BaseNotiModule, DatabaseModule,TypeOrmModule.forRoot(), 
+  imports: [BaseNotiModule, DatabaseModule,
+    TypeOrmModule.forRoot(), 
     Ficha00Module, Ficha100Module, Ficha200Module, 
-    Ficha300Module, CrucesModule, DatosGeneralesModule, DniCrucesModule,HeatmapModule,UbigeosDistritosModule,
+    Ficha300Module, CrucesModule, DatosGeneralesModule,
+     DniCrucesModule,HeatmapModule,UbigeosDistritosModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'seguimiento'),
     }),
@@ -34,7 +39,11 @@ import { MedicamentosModule } from './medicamentos/medicamentos.module';
     AuthModule,
     UsuariosModule,
     NoGeoreferenciadosModule,
-    MedicamentosModule,],
+    MedicamentosModule,
+    HisMinsaModule,
+    PadronVacunadosModule,
+    PuntoVacunacionModule,
+    VacunacionCitaModule,],
   
   controllers: [AppController],
   providers: [AppService],
