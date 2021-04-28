@@ -10,8 +10,15 @@ export class UbigeosDistritosController {
 
     @Get(':COD_DISTRITO')
     async devolverUbigeo(@Param('COD_DISTRITO') COD_DISTRITO: string) {
-        console.log('holas')
+      
         const resp = await this.ubigeos.devolverUbigeoDist(COD_DISTRITO);
+        return resp;
+    }
+
+    @Get('PROVINCIA/:NOMBRE_PROVINCIA')
+    async devolverDistritosProvincia(@Param('NOMBRE_PROVINCIA') NOMBRE_PROVINCIA: string) {
+     
+        const resp = await this.ubigeos.devolver_distritos(NOMBRE_PROVINCIA);
         return resp;
     }
 }
