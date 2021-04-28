@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn, ViewEntity } from "typeorm";
 
-@Entity('PUNTO_VACUNACION')
+@Entity('PUNTO_VACUANACION_2')
 export class PuntoVacunacionEntity {
     @Column()
     _Marca_temporal_: string;
@@ -17,7 +17,7 @@ export class PuntoVacunacionEntity {
     @Column()
     _CUPOS_POR_VACUNATORIO_: number;
     @Column()
-    Column7: string;
+    UBIGEO: string;
     @Column()
     CUPO_ACTUAL:number;
     @Column()
