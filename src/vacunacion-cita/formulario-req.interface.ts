@@ -13,5 +13,6 @@ export interface FormularioReqInterface {
     NUMERO_TELEFONO: '',
     CORREO_ELECTRONICO: '',
     TIPO_SEGURO: '',
-    TIENE_DISCAPACIDAD: false
+    TIENE_DISCAPACIDAD: false,
+    Fecha_Registro:Date
 }

@@ -32,5 +32,7 @@ export class ActualizaDataEntity {
     @Column()
     TIPO_SEGURO: string;
     @Column()
-    TIENE_DISCAPACIDAD: boolean
+    TIENE_DISCAPACIDAD: boolean;
+    @Column()
+    Fecha_Registro:Date;
 }
