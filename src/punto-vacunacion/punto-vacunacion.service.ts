@@ -8,7 +8,7 @@ export class PuntoVacunacionService {
 
     }
     async devolver_Puntos_Por_Distrito(distrito:string){
-        console.log(  distrito.substring(1,6))
+   
       
      let res= await   this.punto_repository.find({where:{UBIGEO:  distrito.substring(1,6)}})
   

@@ -10,6 +10,12 @@ export class VacunacionCitaController {
     }
     @Post('citar')
     async CitarPaciente(@Body() consulta: any) {
+        
+        console.log('la consulta es')
+        console.log(new Date())
+
+
+      
         let respuesta = await this.vacunacion_service.nuevaCita(consulta)
      
         return respuesta

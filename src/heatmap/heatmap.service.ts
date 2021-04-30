@@ -14,7 +14,7 @@ export class HeatmapService {
         let resp = await this.basenoty.find({ where: { clasificacion: "CONFIRMADO" } })
         var respuesta: any[] = []
 
-        console.log('se georeferenciara')
+        
         /*
            await Promise.all(
                resp.map(async (not) => {
@@ -31,8 +31,7 @@ export class HeatmapService {
                })
            )*/
         respuesta = await this.heatmap.find()
-        console.log(respuesta)
-        console.log('se termino')
+     
         return respuesta
     }
     actualizarHeatMap() {

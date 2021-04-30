@@ -11,18 +11,26 @@ export class VacunacionCitaService {
     }
     async nuevaCita(nuevacit: VacunacionCita) {
 
-        console.log(nuevacit.NOMBRE_PUNTO_VACUNACION)
+        
 
         let punto_elegidoc = await this.PuntoVacunacionRepositor.findOne({ _NOMBRE_PUNTO_VACUNACION_: nuevacit.NOMBRE_PUNTO_VACUNACION })
-        console.log(punto_elegidoc)
+      
 
 
         let resto = punto_elegidoc.CUPO_ACTUAL % punto_elegidoc._NUMERO_DE_VACUNATORIOS_
         let fecha = punto_elegidoc.FECHA_ULTIMO_CUPO
+    
 
         if (resto == 0) {
 
             fecha.setTime(punto_elegidoc.FECHA_ULTIMO_CUPO.getTime() + 20 * 60000)
+
+          
+
+            if(punto_elegidoc.FECHA_ULTIMO_CUPO.getTime()){
+
+
+            }
         }
 
         punto_elegidoc.CUPO_ACTUAL = punto_elegidoc.CUPO_ACTUAL + 1;
@@ -33,8 +41,7 @@ export class VacunacionCitaService {
 
 
 
-        console.log('la cita')
-        console.log(fecha)
+ 
 
 
 
