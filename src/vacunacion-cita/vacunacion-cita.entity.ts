@@ -31,6 +31,8 @@ export class VacunacionCitaEntity {
     nombres: String;
     @Column()
     FECHA_PROGRAMADA_CITA:Date;
+
+  
   
     
     @Column()

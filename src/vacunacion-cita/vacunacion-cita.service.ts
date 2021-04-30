@@ -1,20 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { Get, Injectable } from '@nestjs/common';
+import { PadronVacunadosRepository } from 'src/padron-vacunados/padron-vacunados.repository';
 import { PuntoVacunacionRepository } from 'src/punto-vacunacion/punto-vacunacion.repository';
+import { ActualizaDataRepository } from './actualiza-data.repository';
+import { FormularioReqInterface } from './formulario-req.interface';
 import { VacunacionCita } from './vacunacion-cita.interface';
 import { VacunacionCitaRepository } from './vacunacion-cita.repository';
+var json2xls = require('json2xls');
+var fs = require('file-system');
 
 @Injectable()
 export class VacunacionCitaService {
 
-    constructor(private citarepo: VacunacionCitaRepository, private PuntoVacunacionRepositor: PuntoVacunacionRepository) {
+    constructor(private citarepo: VacunacionCitaRepository, private PuntoVacunacionRepositor: PuntoVacunacionRepository,
+        private padronrep: PadronVacunadosRepository,private actuadata:ActualizaDataRepository) {
 
     }
     async nuevaCita(nuevacit: VacunacionCita) {
 
-        console.log(nuevacit.NOMBRE_PUNTO_VACUNACION)
-
+        console.log(nuevacit)
+        //elige punto de vacunacion 
         let punto_elegidoc = await this.PuntoVacunacionRepositor.findOne({ _NOMBRE_PUNTO_VACUNACION_: nuevacit.NOMBRE_PUNTO_VACUNACION })
-        console.log(punto_elegidoc)
+
 
 
         let resto = punto_elegidoc.CUPO_ACTUAL % punto_elegidoc._NUMERO_DE_VACUNATORIOS_
@@ -23,6 +29,7 @@ export class VacunacionCitaService {
         if (resto == 0) {
 
             fecha.setTime(punto_elegidoc.FECHA_ULTIMO_CUPO.getTime() + 20 * 60000)
+            console.log(fecha.getTime())
         }
 
         punto_elegidoc.CUPO_ACTUAL = punto_elegidoc.CUPO_ACTUAL + 1;
@@ -30,12 +37,6 @@ export class VacunacionCitaService {
 
 
         this.PuntoVacunacionRepositor.save(punto_elegidoc)
-
-
-
-        console.log('la cita')
-        console.log(fecha)
-
 
 
         let nuevo = this.citarepo.create()
@@ -50,4 +51,31 @@ export class VacunacionCitaService {
 
 
     }
+
+    async consultar_cita() {
+
+        let JSON1 = await this.citarepo.find();
+        JSON.stringify(JSON1)
+
+        var xls = json2xls(JSON1);
+
+        return xls;
+
+
+        // fs.writeFileSync('data.xlsx', xls, 'binary');
+
+    }
+
+
+    async actualizar_data(data: FormularioReqInterface) {
+
+
+       const resp= await this.actuadata.save(data)
+       return resp;
+
+
+    }
+
+
+
 }
