@@ -6,11 +6,7 @@ export class PuntoVacunacionController {
 
     constructor(private puntos:PuntoVacunacionService){
 
-    }
-
-
-    @Get(':distrito')
-
+    }    @Get(':distrito')
     async devolver_puntos(@Param('distrito') distrito:string){
       let resp=await  this.puntos.devolver_Puntos_Por_Distrito(distrito)
       return resp
