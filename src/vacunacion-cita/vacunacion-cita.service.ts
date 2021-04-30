@@ -12,7 +12,7 @@ var fs = require('file-system');
 export class VacunacionCitaService {
 
     constructor(private citarepo: VacunacionCitaRepository, private PuntoVacunacionRepositor: PuntoVacunacionRepository,
-        private padronrep: PadronVacunadosRepository,private actuadata:ActualizaDataRepository) {
+        private padronrep: PadronVacunadosRepository, private actuadata: ActualizaDataRepository) {
 
     }
     async nuevaCita(nuevacit: VacunacionCita) {
@@ -70,9 +70,9 @@ export class VacunacionCitaService {
 
     async actualizar_data(data: FormularioReqInterface) {
 
-
-       const resp= await this.actuadata.save(data)
-       return resp;
+        data.Fecha_Registro = new Date()
+        const resp = await this.actuadata.save(data)
+        return resp;
 
 
     }
