@@ -8,7 +8,7 @@ export class PadronVacunadosEntity {
     @Column()
     Tipo_de_Documento: Number
     @Column()
-    Numero_de_Documento: String;
+    Numero_de_Documento: string;
     @Column()
     Nombres: String;
     @Column()

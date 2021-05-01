@@ -71,7 +71,14 @@ export class VacunacionCitaService {
     async actualizar_data(data: FormularioReqInterface) {
 
         data.Fecha_Registro = new Date()
+        let padron = await this.padronrep.findOne({ Numero_de_Documento: data.numero_documento })
+        data.numero_documento = padron.Numero_de_Documento
+
+
         const resp = await this.actuadata.save(data)
+        console.log(JSON.stringify(data))
+        console.log(JSON.stringify(resp))
+
         return resp;
 
 
