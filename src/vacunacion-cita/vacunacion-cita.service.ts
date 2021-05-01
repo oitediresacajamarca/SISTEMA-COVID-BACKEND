@@ -76,8 +76,7 @@ export class VacunacionCitaService {
 
 
         const resp = await this.actuadata.save(data)
-        console.log(JSON.stringify(data))
-        console.log(JSON.stringify(resp))
+      
 
         return resp;
 

@@ -19,8 +19,8 @@ export class ActualizaDataEntity {
     TIPO_VIA: string;
     @Column()
     NOMBRE_VIA: string;
-    @Column()
-    NUMERO_VIA: string;
+    @Column({name:'NUMERO_VIA'})
+    NUMERO: string;
     @Column()
     REFERENCIA: string;
     @Column()
