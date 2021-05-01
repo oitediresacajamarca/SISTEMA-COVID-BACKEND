@@ -71,7 +71,8 @@ export class VacunacionCitaService {
 
         data.Fecha_Registro = new Date()
         let padron = await this.padronrep.findOne({ Numero_de_Documento: data.numero_documento })
-        data.numero_documento = padron.Numero_de_Documento
+        if(padron!=undefined){
+        data.numero_documento = padron.Numero_de_Documento}
 
 
         const resp = await this.actuadata.save(data)
