@@ -1,7 +1,7 @@
 export interface FormularioReqInterface {
-    numero_documento: '',
-    ape_paterno: '',
-    ape_materno: '',
+    numero_documento: string,
+    ape_paterno: string,
+    ape_materno: string,
     nombres: '',
     PROVINCIA: '',
     DISTRITO: '',

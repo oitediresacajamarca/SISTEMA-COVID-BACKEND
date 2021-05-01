@@ -35,7 +35,7 @@ export class VacunacionCitaController {
     async actualizarData(@Body() body:FormularioReqInterface) {
         //res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
-    console.log(JSON.stringify(body))  
+ 
     const resp= await this.vacunacion_service.actualizar_data(body)
 
       return resp;
