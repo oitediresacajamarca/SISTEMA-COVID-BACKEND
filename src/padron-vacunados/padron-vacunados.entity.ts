@@ -26,7 +26,7 @@ export class PadronVacunadosEntity {
     @Column()
     Fuente_Datos: String;
     @Column()
-    Edad: Number;
+    Edad: number;
     @Column()
     Departamento_RENIEC: String;
     @Column()

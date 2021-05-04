@@ -1,7 +1,7 @@
 import { Column, ViewEntity } from "typeorm";
 
 
-@ViewEntity('UBIGEOS_DISTRITOS')
+@ViewEntity('DISTRITOS')
 export class UbigeosDistritosEntity {
     @Column()
     "COD_UBIGEO":string;

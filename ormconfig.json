@@ -7,7 +7,7 @@
    "password": "Intercambio1080",
    "database": "DIR_STG_SISCOVID",
    "synchronize": false,
-   "logging": true,
+   "logging": false,
    "entities": [
       "dist/**/*{.ts,.js}"
    ],

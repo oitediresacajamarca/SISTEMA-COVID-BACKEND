@@ -48,6 +48,7 @@ export class VacunacionCitaService {
         nuevo.FECHA_PROGRAMADA_CITA = fecha
 
         let nuevo_guard = await this.citarepo.save(nuevo)
+        console.log('nueva cita:'+nuevo_guard.numero_documento)
         return nuevo_guard
 
 
@@ -71,15 +72,29 @@ export class VacunacionCitaService {
     async actualizar_data(data: FormularioReqInterface) {
 
         data.Fecha_Registro = new Date()
+            
         let padron = await this.padronrep.findOne({ Numero_de_Documento: data.numero_documento })
         if(padron!=undefined){
-        data.numero_documento = padron.Numero_de_Documento}
-
-
+        data.numero_documento = padron.Numero_de_Documento
+        data.ETIQUETA="CARGADO POR EL SISTEMA"
+        data.edad=padron.Edad
         const resp = await this.actuadata.save(data)
+           
+        if(padron.Edad>=80){
+            console.log(resp)
+
+        }else{
+          /*  console.log("menor 80")
+            console.log(resp)*/
+        }
+
+
+        
       
 
+        console.log('actulizo data:'+resp.numero_documento)
         return resp;
+    }
 
 
     }

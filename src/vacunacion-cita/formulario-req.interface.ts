@@ -15,4 +15,6 @@ export interface FormularioReqInterface {
     TIPO_SEGURO: '',
     TIENE_DISCAPACIDAD: false,
     Fecha_Registro:Date
+    edad:number
+    ETIQUETA:string
 }

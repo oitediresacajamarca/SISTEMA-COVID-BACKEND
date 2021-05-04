@@ -13,6 +13,7 @@ export class VacunacionCitaController {
     async CitarPaciente(@Body() consulta: any) {
         
         console.log('la consulta es')
+        console.log(consulta)
         console.log(new Date())
 
 

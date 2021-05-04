@@ -35,4 +35,8 @@ export class ActualizaDataEntity {
     TIENE_DISCAPACIDAD: boolean;
     @Column()
     Fecha_Registro:Date;
+    @Column()
+    edad:number
+    @Column()
+    ETIQUETA:string
 }
