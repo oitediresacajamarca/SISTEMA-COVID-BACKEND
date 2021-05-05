@@ -15,4 +15,5 @@ export interface PadronVacunados {
     Provincia_RENIEC:String;
     Distrito_RENIEC:String;
     Direccion_RENIEC:String;
+    Fecha_Nacimiento:Date;
 }

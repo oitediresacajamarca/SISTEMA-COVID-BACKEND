@@ -7,10 +7,10 @@ export const databaseProviders = [
       {
 
         "type": "mssql",
-        "host": "172.18.20.27",
+        "host": process.env.SERVER,
         "port": 1433,
-        "username": "sa",
-        "password": "Intercambio1080",
+        "username": process.env.USER,
+        "password": process.env.PASSWORD,
         "database": "risc_2030",
         "synchronize": false,
         "logging": false,

@@ -24,6 +24,8 @@ import { HisMinsaModule } from './his-minsa/his-minsa.module';
 import { PadronVacunadosModule } from './padron-vacunados/padron-vacunados.module';
 import { PuntoVacunacionModule } from './punto-vacunacion/punto-vacunacion.module';
 import { VacunacionCitaModule } from './vacunacion-cita/vacunacion-cita.module';
+import { HisModule } from './his/his.module';
+
 
 
 @Module({
@@ -43,7 +45,8 @@ import { VacunacionCitaModule } from './vacunacion-cita/vacunacion-cita.module';
     HisMinsaModule,
     PadronVacunadosModule,
     PuntoVacunacionModule,
-    VacunacionCitaModule,],
+    VacunacionCitaModule,
+    HisModule,],
   
   controllers: [AppController],
   providers: [AppService],

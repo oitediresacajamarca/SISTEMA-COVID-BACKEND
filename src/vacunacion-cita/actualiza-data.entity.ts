@@ -38,5 +38,7 @@ export class ActualizaDataEntity {
     @Column()
     edad:number
     @Column()
-    ETIQUETA:string
+    ETIQUETA:string;
+    @Column()
+    FECHA_NACIMIENTO:Date;
 }

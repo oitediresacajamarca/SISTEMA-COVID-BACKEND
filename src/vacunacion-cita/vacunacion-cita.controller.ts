@@ -39,11 +39,14 @@ export class VacunacionCitaController {
 
 
     @Post('actualizar-data')
-    async actualizarData(@Body() body:FormularioReqInterface) {
+    async actualizarData(@Body() body:any) {
         //res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        let bodys:FormularioReqInterface=body
+
+        bodys.FECHA_NACIMIENTO=new Date( body.FECHA_NACIMIENTO.year,body.FECHA_NACIMIENTO.month,body.FECHA_NACIMIENTO.day)
 
  
-    const resp= await this.vacunacion_service.actualizar_data(body)
+    const resp= await this.vacunacion_service.actualizar_data(bodys)
 
       return resp;
 

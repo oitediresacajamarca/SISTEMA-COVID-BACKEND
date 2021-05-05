@@ -35,5 +35,6 @@ export class PadronVacunadosEntity {
     Distrito_RENIEC: String;
     @Column()
     Direccion_RENIEC: String;
+    FECHA_NACIMIENTO:Date;
   
 }

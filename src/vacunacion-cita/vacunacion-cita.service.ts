@@ -1,4 +1,5 @@
 import { Get, Injectable } from '@nestjs/common';
+import { databaseProviders } from 'src/database.providers';
 import { PadronVacunadosRepository } from 'src/padron-vacunados/padron-vacunados.repository';
 import { PuntoVacunacionRepository } from 'src/punto-vacunacion/punto-vacunacion.repository';
 import { ActualizaDataRepository } from './actualiza-data.repository';
@@ -72,14 +73,23 @@ export class VacunacionCitaService {
     async actualizar_data(data: FormularioReqInterface) {
 
         data.Fecha_Registro = new Date()
+        data.ETIQUETA="CARGADO POR EL SISTEMA"
+        
             
         let padron = await this.padronrep.findOne({ Numero_de_Documento: data.numero_documento })
+      
+   
         if(padron!=undefined){
-        data.numero_documento = padron.Numero_de_Documento
-        data.ETIQUETA="CARGADO POR EL SISTEMA"
+     
+     
         data.edad=padron.Edad
+  
+        data.FECHA_NACIMIENTO=data.FECHA_NACIMIENTO
+      
         const resp = await this.actuadata.save(data)
-           
+
+  
+        
         if(padron.Edad>=80){
             console.log(resp)
 
@@ -94,7 +104,23 @@ export class VacunacionCitaService {
 
         console.log('actulizo data:'+resp.numero_documento)
         return resp;
+    }else{
+
+       
+     
+        data.FECHA_NACIMIENTO=data.FECHA_NACIMIENTO
+        data.edad=(new Date()).getFullYear()-(data.FECHA_NACIMIENTO).getFullYear()
+      
+        const resp = await this.actuadata.save(data)
+
+
+        console.log('actulizo data: no esta en padron: '+resp.numero_documento)
+
+        return resp;
+
     }
+
+
 
 
     }

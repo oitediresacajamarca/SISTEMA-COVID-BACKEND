@@ -1,10 +1,10 @@
 [{ 
     
    "type": "mssql",
-   "host": "172.18.20.27",
+   "host": "localhost",
    "port": 1433,
    "username": "sa",
-   "password": "Intercambio1080",
+   "password": ".",
    "database": "DIR_STG_SISCOVID",
    "synchronize": false,
    "logging": false,
@@ -26,7 +26,7 @@
    "host": "localhost",
    "port": 1433,
    "username": "sa",
-   "password": "p",
+   "password": "p.",
    "database": "BD_VACUNACION_COVID",
    "synchronize": false,
    "logging": false,
