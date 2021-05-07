@@ -22,4 +22,6 @@ export class PuntoVacunacionEntity {
     CUPO_ACTUAL:number;
     @Column()
     FECHA_ULTIMO_CUPO:Date;
+    @Column()
+    EDAD_CITA:number;
 }

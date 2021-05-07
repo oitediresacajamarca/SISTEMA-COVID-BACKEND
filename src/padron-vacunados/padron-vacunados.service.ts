@@ -31,12 +31,15 @@ export class PadronVacunadosService {
             dat = { mensaje: {existeenpadron:false,existeenhis:false}}
          }
       } else {
-         console.log('llllllllllllll')
+    
          dat = { mensaje: {existeenpadron:true,existeenhis:false}}
       }
 
+
+
       dat = { ...resp, ...dat };
       console.log(dat)
+
 
       return dat;
 
