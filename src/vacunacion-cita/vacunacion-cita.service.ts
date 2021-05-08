@@ -1,4 +1,5 @@
-import { Get, Injectable } from '@nestjs/common';
+import { Get, Injectable, MethodNotAllowedException } from '@nestjs/common';
+import { getMaxListeners } from 'process';
 import { databaseProviders } from 'src/database.providers';
 import { PadronVacunadosRepository } from 'src/padron-vacunados/padron-vacunados.repository';
 import { PuntoVacunacionRepository } from 'src/punto-vacunacion/punto-vacunacion.repository';
@@ -7,7 +8,10 @@ import { FormularioReqInterface } from './formulario-req.interface';
 import { VacunacionCita } from './vacunacion-cita.interface';
 import { VacunacionCitaRepository } from './vacunacion-cita.repository';
 var json2xls = require('json2xls');
+
 var fs = require('file-system');
+const nodemailer = require("nodemailer");
+const clien = require("twilio")('AC78e305b479db052ec298256587cc4a62','e3c57a30d44fe1b12a42b7205cae3405');
 
 @Injectable()
 export class VacunacionCitaService {
@@ -74,6 +78,7 @@ export class VacunacionCitaService {
 
         data.Fecha_Registro = new Date()
         data.ETIQUETA="CARGADO POR EL SISTEMA"
+        let resp
         
             
         let padron = await this.padronrep.findOne({ Numero_de_Documento: data.numero_documento })
@@ -84,9 +89,9 @@ export class VacunacionCitaService {
      
         data.edad=padron.Edad
   
-        data.FECHA_NACIMIENTO=data.FECHA_NACIMIENTO
+     
       
-        const resp = await this.actuadata.save(data)
+         resp = await this.actuadata.save(data)
 
   
         
@@ -102,24 +107,55 @@ export class VacunacionCitaService {
         
       
 
-        console.log('actulizo data:'+resp.numero_documento)
-        return resp;
-    }else{
-
-       
-     
-        data.FECHA_NACIMIENTO=data.FECHA_NACIMIENTO
-        data.edad=(new Date()).getFullYear()-(data.FECHA_NACIMIENTO).getFullYear()
+        console.log('actualizo data:'+resp.numero_documento)
       
-        const resp = await this.actuadata.save(data)
+    }
+    else
+    {
+
+     
+             data.edad=(new Date()).getFullYear()-(data.FECHA_NACIMIENTO).getFullYear()
+             console.log(data.edad)
+      
+         resp = await this.actuadata.save(data)
 
 
-        console.log('actulizo data: no esta en padron: '+resp.numero_documento)
+        console.log('actualizo data: no esta en padron: '+resp.numero_documento)
 
-        return resp;
+     
 
     }
 
+
+
+    let transporter = nodemailer.createTransport({
+     service:'Gmail',
+      //  secure: false, // true for 465, false for other ports
+        auth: {
+          user: 'oite.diresa.cajamarca@gmail.com', // generated ethereal user
+          pass: 'Nomeolvido1', // generated ethereal password
+        },
+        tls : { rejectUnauthorized: false }
+      });
+    
+      // send mail with defined transport object
+     /* let info = await transporter.sendMail({
+        from: 'oite.diresa.cajamarca@gmail.com', // sender address
+        to: "alex.arana.r.e@gmail.com",
+        subject: "DIRESA CAJAMARCA", // Subject line
+        text: "SUS DATOS HAN SIDO CORRECTAMENTE ACTUALIZADOS", // plain text body
+        html: "<b>Pronto nos comunicaremos con usted </b>", // html body
+        
+      });
+
+      clien.messages.create({
+          to:'+51942149115',
+          from:process.env.CUENTA_TWILIO_PHONE_NUMBER_FROM,
+          body:'DIRESA CAJAMARCA le Informa sus datos han sido actualizados correctamente pronto nuestro personal se comunicara con usted'
+      }).then(message=>console.log(message))*/
+
+     
+    return resp;
 
 
 

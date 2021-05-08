@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Console } from 'console';
 import { PuntoVacunacionRepository } from 'src/punto-vacunacion/punto-vacunacion.repository';
 import { FormularioReqInterface } from './formulario-req.interface';
 import { VacunacionCitaService } from './vacunacion-cita.service';
@@ -14,7 +15,7 @@ export class VacunacionCitaController {
         
         console.log('la consulta es')
         console.log(consulta)
-        console.log(new Date())
+      
 
 
       
@@ -42,8 +43,10 @@ export class VacunacionCitaController {
     async actualizarData(@Body() body:any) {
         //res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         let bodys:FormularioReqInterface=body
+    
 
-        bodys.FECHA_NACIMIENTO=new Date( body.FECHA_NACIMIENTO.year,body.FECHA_NACIMIENTO.month,body.FECHA_NACIMIENTO.day)
+        bodys.FECHA_NACIMIENTO=new Date( body.FECHA_NACIMIENTO.year,body.FECHA_NACIMIENTO.month-1,body.FECHA_NACIMIENTO.day+1,0,0,0)
+     
 
  
     const resp= await this.vacunacion_service.actualizar_data(bodys)
