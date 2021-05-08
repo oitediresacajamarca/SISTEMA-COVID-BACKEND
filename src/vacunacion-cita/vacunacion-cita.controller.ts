@@ -37,15 +37,29 @@ export class VacunacionCitaController {
 
 
     }
-
+    readonly DELIMITER = '-';
 
     @Post('actualizar-data')
     async actualizarData(@Body() body:any) {
         //res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         let bodys:FormularioReqInterface=body
     
+   
 
+
+        if (body.FECHA_NACIMIENTO.day==undefined) {
+            let date = body.FECHA_NACIMIENTO.split(this.DELIMITER);
+            body.FECHA_NACIMIENTO= {
+              day : parseInt(date[0], 10),
+              month : parseInt(date[1], 10),
+              year : parseInt(date[2], 10)
+            };
+          }
+
+       
         bodys.FECHA_NACIMIENTO=new Date( body.FECHA_NACIMIENTO.year,body.FECHA_NACIMIENTO.month-1,body.FECHA_NACIMIENTO.day+1,0,0,0)
+
+    
      
 
  

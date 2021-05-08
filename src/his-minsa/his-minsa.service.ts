@@ -30,7 +30,7 @@ export class HisMinsaService {
         "mode": "cors",
         "credentials": "include"
       }).then(respuesta=>{
-console.log(respuesta)
+
  return   respuesta
 });
 

@@ -38,7 +38,7 @@ export class PadronVacunadosService {
 
 
       dat = { ...resp, ...dat };
-      console.log(dat)
+   
 
 
       return dat;
