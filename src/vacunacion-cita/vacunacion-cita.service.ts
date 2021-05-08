@@ -79,7 +79,7 @@ export class VacunacionCitaService {
         data.Fecha_Registro = new Date()
         data.ETIQUETA="CARGADO POR EL SISTEMA"
         let resp
-        
+   
             
         let padron = await this.padronrep.findOne({ Numero_de_Documento: data.numero_documento })
       
@@ -96,7 +96,7 @@ export class VacunacionCitaService {
   
         
         if(padron.Edad>=80){
-            console.log(resp)
+         
 
         }else{
           /*  console.log("menor 80")
