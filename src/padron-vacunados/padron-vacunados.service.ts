@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MaestroHisPacienteRepository } from 'src/his/maestro-his-paciente.repository';
 import { Stream } from 'stream';
 import { Datosreniec } from './interfaces/datosreniec.interface';
+import { PadronVacunadosEntity } from './padron-vacunados.entity';
 import { PadronVacunadosRepository } from './padron-vacunados.repository';
 const fetch = require('node-fetch');
 
@@ -13,46 +14,68 @@ export class PadronVacunadosService {
    async devolver_Vacunado(dni: string) {
 
 
+      let daatos: PadronVacunadosEntity = this.padronServic.create()
+      let datos_reniec: any
+let dat={}
 
 
 
+let resp = await this.padronServic.findOne({ Numero_de_Documento: dni })
+dat = { mensaje: { existeenpadron: false, existeenhis: true ,datos_erroneos:false} }
+if (resp == undefined) {
+ /* let pac_his = await this.maestroRep.findOne({ where: { Numero_Documento_Paciente: dni } })
+  if (pac_his != undefined) {
+     resp = {
+        Numero_de_Documento: pac_his.Numero_Documento_Paciente,
+        Apellido_Paterno: pac_his.Apellido_Paterno_Paciente, Apellido_Materno: pac_his.Apellido_Materno_Paciente
+        , DIRIS: 'CAJAMARCA', Departamento: 'CAJAMARCA', Departamento_RENIEC: '', Direccion_RENIEC: pac_his.Domicilio_Reniec,
+        Distrito_RENIEC: '', Distrito: '', Edad: (new Date()).getFullYear() - pac_his.Fecha_Nacimiento_Paciente.getFullYear(),
+        Provincia: '', Fuente_Datos: '', Nombre_EESS: '', Nombres: pac_his.Nombres_Paciente, Provincia_RENIEC: '',
+        Tipo_de_Documento: pac_his.Id_Tipo_Documento_Paciente,
+        FECHA_NACIMIENTO: pac_his.Fecha_Nacimiento_Paciente
+     }
 
+     dat = { mensaje: { existeenpadron: false, existeenhis: true } }
+  }
+  else {
 
+     dat = { mensaje: { existeenpadron: false, existeenhis: false } }
+  }*/
+} else {
 
+  dat = { mensaje: { existeenpadron: true, existeenhis: true ,datos_erroneos:false} }
+  
+}
 
+      datos_reniec = await this.devolverReniecData(dni)
+     
+      datos_reniec=JSON.parse(datos_reniec)
+      if(datos_reniec.fechnacpac!=undefined){
 
+      let fechaarray = datos_reniec.fechnacpac.split('/')
+      let fec_nac_reniec = new Date(parseInt(fechaarray[2]), parseInt(fechaarray[1])-1, parseInt(fechaarray[0]))
 
-
-
-      let resp = await this.padronServic.findOne({ Numero_de_Documento: dni })
-      let dat = {}
-      if (resp == undefined) {
-         let pac_his = await this.maestroRep.findOne({ where: { Numero_Documento_Paciente: dni } })
-         if (pac_his != undefined) {
-            resp = {
-               Numero_de_Documento: pac_his.Numero_Documento_Paciente,
-               Apellido_Paterno: pac_his.Apellido_Paterno_Paciente, Apellido_Materno: pac_his.Apellido_Materno_Paciente
-               , DIRIS: 'CAJAMARCA', Departamento: 'CAJAMARCA', Departamento_RENIEC: '', Direccion_RENIEC: pac_his.Domicilio_Reniec,
-               Distrito_RENIEC: '', Distrito: '', Edad: (new Date()).getFullYear() - pac_his.Fecha_Nacimiento_Paciente.getFullYear(),
-               Provincia: '', Fuente_Datos: '', Nombre_EESS: '', Nombres: pac_his.Nombres_Paciente, Provincia_RENIEC: '',
-               Tipo_de_Documento: pac_his.Id_Tipo_Documento_Paciente,
-               FECHA_NACIMIENTO: pac_his.Fecha_Nacimiento_Paciente
-            }
-
-            dat = { mensaje: { existeenpadron: false, existeenhis: true } }
-         }
-         else {
-
-            dat = { mensaje: { existeenpadron: false, existeenhis: false } }
-         }
-      } else {
-
-         dat = { mensaje: { existeenpadron: true, existeenhis: false } }
+      daatos = {
+         Numero_de_Documento: datos_reniec.numdoc,
+         Apellido_Paterno: datos_reniec.apelpatpac, Apellido_Materno: datos_reniec.apelmatpac
+         , DIRIS: 'CAJAMARCA', Departamento: 'CAJAMARCA', Departamento_RENIEC: '', Direccion_RENIEC: datos_reniec.direccion,
+         Distrito_RENIEC: '', Distrito: '', Edad: (new Date()).getFullYear() - fec_nac_reniec.getFullYear(),
+         Provincia: '', Fuente_Datos: 'reniec', Nombre_EESS: '', Nombres: datos_reniec.nombpac, Provincia_RENIEC: '',
+         Tipo_de_Documento: 1,
+         FECHA_NACIMIENTO: fec_nac_reniec
       }
+   }else{
+    
+      dat = { mensaje: { existeenpadron: false, existeenhis: true ,datos_erroneos:true} }
+   }
+    
+
+
+ 
 
 
 
-      dat = { ...resp, ...dat };
+      dat = { ...daatos, ...dat };
 
 
 
@@ -98,15 +121,15 @@ export class PadronVacunadosService {
          "method": "POST",
          "mode": "cors"
       })
-      console.log(resp)
-      let stre=resp.body
+
+      let stre = resp.body
 
 
 
-     return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
          let data = "";
 
-         stre.on("data", chunk => {data += chunk; console.log(1);});
+         stre.on("data", chunk => { data += chunk; });
          stre.on("end", () => { resolve(data); console.log('seres') });
          stre.on("error", error => reject(error));
       });

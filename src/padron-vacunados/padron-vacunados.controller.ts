@@ -12,10 +12,11 @@ export class PadronVacunadosController {
     }
     @Get(':num_doc')
     async devolverVacunado(@Param('num_doc') numdoc: string) {
+        console.log('consulto')
         console.log(numdoc)
 
 
-        let resp = await this.padron.devolverReniecData(numdoc)
+        let resp = await this.padron.devolver_Vacunado(numdoc)
 
         console.log(resp)
 
