@@ -1,5 +1,8 @@
 import { Controller, Get, Param, Response } from '@nestjs/common';
+import { rejects } from 'assert';
+import { resolve } from 'path';
 import { PadronVacunadosService } from './padron-vacunados.service';
+const fetch = require('node-fetch');
 
 @Controller('vacunados/padron-vacunados')
 export class PadronVacunadosController {
@@ -8,10 +11,23 @@ export class PadronVacunadosController {
 
     }
     @Get(':num_doc')
-    async devolverVacunado(@Param('num_doc') numdoc: string, @Response() respi: any) {
+    async devolverVacunado(@Param('num_doc') numdoc: string) {
         console.log(numdoc)
-        let resp: any = await this.padron.devolver_Vacunado(numdoc);
-        resp.pipe(respi);
+
+
+        let resp = await this.padron.devolverReniecData(numdoc)
+
+        console.log(resp)
+
+        return resp
+        /*
+        return res*/
+
     }
+
+
+
+
+
 
 }

@@ -10,20 +10,7 @@ export class PadronVacunadosService {
    constructor(private padronServic: PadronVacunadosRepository, private maestroRep: MaestroHisPacienteRepository) {
 
    }
-   async devolver_Vacunado(dni: string){
-
-
-      let pipereniec = await this.devolverReniecData(dni)
-      let datos_reniec:Datosreniec
-      let datos_reniec2:Datosreniec
-
-      let reniec = ''
-      pipereniec.on('data', (chunk) => {
-         reniec += chunk
-      })
-
-      datos_reniec2=await  pipereniec.on('end', async () => {
-         datos_reniec=JSON.parse(reniec)
+   async devolver_Vacunado(dni: string) {
 
 
 
@@ -33,7 +20,10 @@ export class PadronVacunadosService {
 
 
 
-         
+
+
+
+
       let resp = await this.padronServic.findOne({ Numero_de_Documento: dni })
       let dat = {}
       if (resp == undefined) {
@@ -73,15 +63,13 @@ export class PadronVacunadosService {
 
 
 
-  
-      })
-
-
-
- datos_reniec2
-
 
    }
+
+
+
+
+
 
 
    async devolverReniecData(dni: string) {
@@ -109,23 +97,25 @@ export class PadronVacunadosService {
          "body": "C=PACIENTE&S=INFOGETBYIDRENIEC&idtipodoc=1&numdoc=" + dni,
          "method": "POST",
          "mode": "cors"
-      }).then(respuesta => {
-
-
-         return respuesta.body
-
       })
+      console.log(resp)
+      let stre=resp.body
 
 
 
-      return resp;
+     return new Promise((resolve, reject) => {
+         let data = "";
+
+         stre.on("data", chunk => {data += chunk; console.log(1);});
+         stre.on("end", () => { resolve(data); console.log('seres') });
+         stre.on("error", error => reject(error));
+      });
+
+
+
+
 
 
 
    }
-
-
-
-
-
 }
