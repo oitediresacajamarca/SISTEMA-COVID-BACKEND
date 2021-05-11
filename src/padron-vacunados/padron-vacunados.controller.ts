@@ -28,6 +28,25 @@ export class PadronVacunadosController {
 
 
 
+    @Get('vacunas/:num_doc')
+    async consultarVacunas(@Param('num_doc') numdoc: string) {
+        console.log('consulto')
+        console.log(numdoc)
+
+
+        let resp = await this.padron.devolverVacunasHis(numdoc)
+
+        console.log(resp)
+
+        return resp
+        /*
+        return res*/
+
+    }
+
+
+
+
 
 
 

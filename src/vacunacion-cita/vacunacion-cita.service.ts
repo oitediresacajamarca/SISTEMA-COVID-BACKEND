@@ -8,7 +8,7 @@ import { FormularioReqInterface } from './formulario-req.interface';
 import { VacunacionCita } from './vacunacion-cita.interface';
 import { VacunacionCitaRepository } from './vacunacion-cita.repository';
 var json2xls = require('json2xls');
-
+const fetch = require('node-fetch');
 var fs = require('file-system');
 const nodemailer = require("nodemailer");
 const clien = require("twilio")('AC78e305b479db052ec298256587cc4a62','e3c57a30d44fe1b12a42b7205cae3405');
@@ -153,6 +153,34 @@ export class VacunacionCitaService {
           from:process.env.CUENTA_TWILIO_PHONE_NUMBER_FROM,
           body:'DIRESA CAJAMARCA le Informa sus datos han sido actualizados correctamente pronto nuestro personal se comunicara con usted'
       }).then(message=>console.log(message))*/
+
+
+      
+      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile="+data.NUMERO_TELEFONO+"&country=51&message='Su registro se ha guardado correctamente pronto se le comunicara la fecha y la hora de su cita. NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
+        "headers": {
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+          "cache-control": "no-cache",
+          "pragma": "no-cache",
+          "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-fetch-dest": "document",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-site": "none",
+          "sec-fetch-user": "?1",
+          "upgrade-insecure-requests": "1",
+          "cookie": "_ga=GA1.2.794645600.1620680365; _gid=GA1.2.1384613325.1620680365",
+          "Authorization":"Basic RElSRVNBQ2FqYW1hcmNhOkRpcmVzYXNtcyQ="
+        },
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": null,
+        "method": "GET",
+        "mode": "cors"
+      }).then((data)=>{
+
+      })
+
+
 
      
     return resp;

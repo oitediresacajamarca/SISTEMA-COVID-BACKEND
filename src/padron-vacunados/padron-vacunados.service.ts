@@ -136,9 +136,53 @@ if (resp == undefined) {
 
 
 
+   }
 
+
+
+   async devolverVacunasHis(dni: string) {
+
+
+
+
+      let resp = await fetch("https://websalud.minsa.gob.pe/appInmunizacion/view/consultas/consultavacunados/Consultas", {
+         "headers": {
+           "accept": "application/json, text/javascript, */*; q=0.01",
+           "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+           "cache-control": "no-cache",
+           "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+           "pragma": "no-cache",
+           "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+           "sec-ch-ua-mobile": "?0",
+           "sec-fetch-dest": "empty",
+           "sec-fetch-mode": "cors",
+           "sec-fetch-site": "same-origin",
+           "x-requested-with": "XMLHttpRequest",
+           "cookie": "JSESSIONID=574EDEE96EFD4A268EF8DBC9168AC42C; _ga_F4HY3YK7EH=GS1.1.1613481795.4.0.1613481795.0; _ga_LEDF527D3S=GS1.1.1615149485.2.0.1615149485.0; _ga_NWVQ3HSJKS=GS1.1.1616246531.42.0.1616246531.0; _ga_T513LTCYK1=GS1.1.1619054927.32.0.1619054927.0; _ga=GA1.3.1150659243.1611596987; __cfduid=d7241dd5a0233ce70e4ca2357878e69711619366672; rxVisitor=1620539318320BFA2FV5SIPF98E24NOURI0CNGFS7G57L; byt=4026e19faf33ddc14db0551d41a41a2b6c89c39fc4313aa2e5b036f65b8aac2d96865f172f10b65eaca5d51c0008664f075a8f6e11cdc6b9a36e717aabec36cbcca69b6b52bd1a9e3897a65dbc5d02d4; dtSa=-; dtPC=3$539444204_889h-vKDLLAIPJDMNKHDMCDODSLIWOCJMELJOP; dtCookie=3$C59C5C6B24F862B03C0C89FE08E2A9CD|RUM+Default+Application|1|HISMINSA|1; rxvt=1620541248640|1620539318322; dtLatC=1"
+         },
+         "referrer": "https://websalud.minsa.gob.pe/appInmunizacion/view/consultas/consultavacunados/consultavacunados.jsp",
+         "referrerPolicy": "strict-origin-when-cross-origin",
+         "body": "accion=PAGS&col=per.num_doc&txt=47936051&rangoedad=&fechainicio=07%2F02%2F2021&fechafin=31%2F12%2F2021&idactividad=127&iddiresa=7&idred=&idestablecimiento=",
+         "method": "POST",
+         "mode": "cors"
+       });
+
+      let stre = resp.body
+
+
+
+      return new Promise((resolve, reject) => {
+         let data = "";
+
+         stre.on("data", chunk => { data += chunk; });
+         stre.on("end", () => { resolve(data); console.log('seres') });
+         stre.on("error", error => reject(error));
+      });
 
 
 
    }
+
+
+
 }
