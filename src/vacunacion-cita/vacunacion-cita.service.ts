@@ -156,7 +156,7 @@ export class VacunacionCitaService {
 
 
       
-      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile="+data.NUMERO_TELEFONO+"&country=51&message='Su registro se ha guardado correctamente pronto se le comunicara la fecha y la hora de su cita. NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
+      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile="+data.NUMERO_TELEFONO+"&country=51&message=Su registro se ha guardado correctamente. Pronto se le comunicara la fecha y la hora de su cita. 'NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
         "headers": {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
           "accept-language": "es-ES,es;q=0.9,en;q=0.8",
@@ -188,6 +188,7 @@ export class VacunacionCitaService {
 
 
     }
+    
 
 
 
