@@ -177,7 +177,7 @@ export class VacunacionCitaService {
         "method": "GET",
         "mode": "cors"
       }).then((data)=>{
-
+        console.log(data)
       })
 
 
