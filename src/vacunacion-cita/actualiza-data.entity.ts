@@ -41,4 +41,9 @@ export class ActualizaDataEntity {
     ETIQUETA:string;
     @Column()
     FECHA_NACIMIENTO:Date;
+    @Column()
+    DISCAPACIDAD_DESCRIPCION:string
+
+    
+    
 }

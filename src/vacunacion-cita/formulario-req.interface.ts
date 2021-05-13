@@ -17,5 +17,7 @@ export interface FormularioReqInterface {
     Fecha_Registro:Date
     edad:number
     ETIQUETA:string
-    FECHA_NACIMIENTO:Date
+    FECHA_NACIMIENTO:Date,
+    DISCAPACIDAD_DESCRIPCION:string,
+
 }

@@ -26,4 +26,9 @@ export class PuntoVacunacionEntity {
     EDAD_CITA:number;
     @Column()
     ESTADO:string;
+   
+    @Column()
+    CITAR_HABILITADO:string
+     @Column()
+    FORMA_CITA:string
 }

@@ -43,8 +43,9 @@ export class VacunacionCitaController {
     async actualizarData(@Body() body:any) {
         //res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         let bodys:FormularioReqInterface=body
+        console.log('veee')
     
-   
+   console.log(body)
 
 
         if (body.FECHA_NACIMIENTO.day==undefined) {
@@ -64,6 +65,8 @@ export class VacunacionCitaController {
 
  
     const resp= await this.vacunacion_service.actualizar_data(bodys)
+    const resp_punt_vac={}
+
 
       return resp;
 
