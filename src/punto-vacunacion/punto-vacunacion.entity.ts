@@ -30,5 +30,10 @@ export class PuntoVacunacionEntity {
     @Column()
     CITAR_HABILITADO:string
      @Column()
-    FORMA_CITA:string
+    FORMA_CITA:string;
+    @Column()
+    CUPOS_HORA:number;
+   
+    @Column()
+    FECHA_INICIO_PROGRAMA:Date
 }

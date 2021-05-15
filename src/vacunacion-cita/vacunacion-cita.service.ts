@@ -27,12 +27,18 @@ export class VacunacionCitaService {
 
     let punto_elegidoc = await this.PuntoVacunacionRepositor.findOne({ _NOMBRE_PUNTO_VACUNACION_: nuevacit.NOMBRE_PUNTO_VACUNACION })
 
-    let orden = Math.trunc(punto_elegidoc.CUPO_ACTUAL / 10)
-    let orden_dia = Math.trunc(punto_elegidoc.CUPO_ACTUAL / 60)
+    let orden = Math.trunc((punto_elegidoc.CUPO_ACTUAL % (punto_elegidoc.CUPOS_HORA * 6)) / punto_elegidoc.CUPOS_HORA)
+    let orden_dia = Math.trunc(punto_elegidoc.CUPO_ACTUAL / (punto_elegidoc.CUPOS_HORA * 6))
+
     console.log(orden)
+    console.log(orden_dia)
+    console.log(nuevacit)
+
+    let nuevo = this.citarepo.create()
+
     let mensaje
     let fecha = punto_elegidoc.FECHA_ULTIMO_CUPO
-    let fecha_respuesta = new Date(2021, 4, 15)
+    let fecha_respuesta = punto_elegidoc.FECHA_INICIO_PROGRAMA
     if (punto_elegidoc.FORMA_CITA = 'PPH') {
 
 
@@ -65,37 +71,36 @@ export class VacunacionCitaService {
         mensaje = { intervalo: 'DE 3 A 4 PM' }
 
       }
-      console.log('revisar esto')
-      console.log(orden_dia)
-      console.log(   fecha_respuesta)
+
       mensaje.fecha = new Date(fecha_respuesta.setDate(fecha_respuesta.getDate() + orden_dia))
-      console.log(   mensaje.fecha)
+
+      nuevo.FECHA_CITA = new Date(fecha_respuesta.getFullYear(),fecha_respuesta.getMonth(),(fecha_respuesta.getDate()+1))
+      nuevo.HORARIO_CITA = mensaje.intervalo
 
 
-
-      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message= Su cita  para la vacunacion Anticovid es para el dia "+fecha_respuesta.getDate()+"/"+(fecha_respuesta.getMonth()+1).toString()+"/"+ fecha_respuesta.getFullYear() +mensaje.intervalo+" en el punto de vacunacion: "+punto_elegidoc._NOMBRE_PUNTO_VACUNACION_+"  &messageFormat=1", {
-      "headers": {
-        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "accept-language": "es-ES,es;q=0.9,en;q=0.8",
-        "cache-control": "no-cache",
-        "pragma": "no-cache",
-        "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
-        "sec-ch-ua-mobile": "?0",
-        "sec-fetch-dest": "document",
-        "sec-fetch-mode": "navigate",
-        "sec-fetch-site": "none",
-        "sec-fetch-user": "?1",
-        "upgrade-insecure-requests": "1",
-        "cookie": "_ga=GA1.2.794645600.1620680365; _gid=GA1.2.1384613325.1620680365",
-        "Authorization": "Basic RElSRVNBQ2FqYW1hcmNhOkRpcmVzYXNtcyQ="
-      },
-      "referrerPolicy": "strict-origin-when-cross-origin",
-      "body": null,
-      "method": "GET",
-      "mode": "cors"
-    }).then((data) => {
-      console.log(data)
-    })
+      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message= Su cita  para la vacunacion Anticovid es para el dia " + fecha_respuesta.getDate() + "/" + (fecha_respuesta.getMonth() + 1).toString() + "/" + fecha_respuesta.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1", {
+        "headers": {
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+          "cache-control": "no-cache",
+          "pragma": "no-cache",
+          "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-fetch-dest": "document",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-site": "none",
+          "sec-fetch-user": "?1",
+          "upgrade-insecure-requests": "1",
+          "cookie": "_ga=GA1.2.794645600.1620680365; _gid=GA1.2.1384613325.1620680365",
+          "Authorization": "Basic RElSRVNBQ2FqYW1hcmNhOkRpcmVzYXNtcyQ="
+        },
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": null,
+        "method": "GET",
+        "mode": "cors"
+      }).then((data) => {
+        console.log(data)
+      })
 
 
 
@@ -115,22 +120,22 @@ export class VacunacionCitaService {
 
 
         fecha.setTime(punto_elegidoc.FECHA_ULTIMO_CUPO.getTime() + 20 * 60000)
-        console.log(fecha.getTime())
+
       }
     }
     punto_elegidoc.CUPO_ACTUAL = punto_elegidoc.CUPO_ACTUAL + 1;
     punto_elegidoc.FECHA_ULTIMO_CUPO = fecha
 
-
+   
     this.PuntoVacunacionRepositor.save(punto_elegidoc)
 
 
-    let nuevo = this.citarepo.create()
 
     Object.assign(nuevo, nuevacit)
     nuevo.FECHA_REGISTRO = new Date()
 
     nuevo.FECHA_PROGRAMADA_CITA = fecha
+    console.log(nuevo)
 
     let nuevo_guard = await this.citarepo.save(nuevo)
     console.log('nueva cita:' + nuevo_guard.numero_documento)
@@ -162,7 +167,7 @@ export class VacunacionCitaService {
 
 
     let padron = await this.padronrep.findOne({ Numero_de_Documento: data.numero_documento })
-    console.log(data)
+
 
 
     if (padron != undefined) {
@@ -195,7 +200,7 @@ export class VacunacionCitaService {
 
 
       data.edad = (new Date()).getFullYear() - (data.FECHA_NACIMIENTO).getFullYear()
-      console.log(data.edad)
+
 
       resp = await this.actuadata.save(data)
 
@@ -239,34 +244,33 @@ export class VacunacionCitaService {
          body:'DIRESA CAJAMARCA le Informa sus datos han sido actualizados correctamente pronto nuestro personal se comunicara con usted'
      }).then(message=>console.log(message))*/
 
-     if(!(resp_punto.CITAR_HABILITADO=='HABILITADO'&&data.edad>=resp_punto.EDAD_CITA)){
-       console.log('probaarss')
-       console.log(!(resp_punto.CITAR_HABILITADO=='HABILITADO'&&data.edad>=resp_punto.EDAD_CITA))
+    if (!(resp_punto.CITAR_HABILITADO == 'HABILITADO' && data.edad >= resp_punto.EDAD_CITA)) {
 
-    fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + data.NUMERO_TELEFONO + "&country=51&message= Su registro se ha guardado correctamente. Pronto se le comunicara la fecha y la hora de su cita. 'NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
-      "headers": {
-        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "accept-language": "es-ES,es;q=0.9,en;q=0.8",
-        "cache-control": "no-cache",
-        "pragma": "no-cache",
-        "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
-        "sec-ch-ua-mobile": "?0",
-        "sec-fetch-dest": "document",
-        "sec-fetch-mode": "navigate",
-        "sec-fetch-site": "none",
-        "sec-fetch-user": "?1",
-        "upgrade-insecure-requests": "1",
-        "cookie": "_ga=GA1.2.794645600.1620680365; _gid=GA1.2.1384613325.1620680365",
-        "Authorization": "Basic RElSRVNBQ2FqYW1hcmNhOkRpcmVzYXNtcyQ="
-      },
-      "referrerPolicy": "strict-origin-when-cross-origin",
-      "body": null,
-      "method": "GET",
-      "mode": "cors"
-    }).then((data) => {
-      console.log(data)
-    })
-  }
+
+      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + data.NUMERO_TELEFONO + "&country=51&message= Su registro se ha guardado correctamente. Pronto se le comunicara la fecha y la hora de su cita. 'NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
+        "headers": {
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+          "cache-control": "no-cache",
+          "pragma": "no-cache",
+          "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-fetch-dest": "document",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-site": "none",
+          "sec-fetch-user": "?1",
+          "upgrade-insecure-requests": "1",
+          "cookie": "_ga=GA1.2.794645600.1620680365; _gid=GA1.2.1384613325.1620680365",
+          "Authorization": "Basic RElSRVNBQ2FqYW1hcmNhOkRpcmVzYXNtcyQ="
+        },
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": null,
+        "method": "GET",
+        "mode": "cors"
+      }).then((data) => {
+        //  console.log(data)
+      })
+    }
 
 
 

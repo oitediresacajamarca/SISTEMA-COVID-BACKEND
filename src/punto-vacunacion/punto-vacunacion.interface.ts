@@ -13,6 +13,10 @@ export interface PuntoVacunacion {
     _CUPOS_POR_VACUNATORIO_: string;
     Column7: string;
     CITAR_HABILITADO: string;
-    FORMA_CITA: string
+    FORMA_CITA: string;
+    CUPOS_HORA:number;
+   
+   
+    FECHA_INICIO_PROGRAMA:Date
 
 }

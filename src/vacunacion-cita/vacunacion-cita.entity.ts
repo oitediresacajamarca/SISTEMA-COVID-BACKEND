@@ -32,6 +32,13 @@ export class VacunacionCitaEntity {
     @Column()
     FECHA_PROGRAMADA_CITA:Date;
 
+    @Column()
+    FECHA_CITA:Date;
+    @Column()
+    HORARIO_CITA:String;
+
+
+
   
   
     
