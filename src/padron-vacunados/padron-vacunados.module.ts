@@ -4,10 +4,11 @@ import { PadronVacunadosController } from './padron-vacunados.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PadronVacunadosRepository } from './padron-vacunados.repository';
 import { MaestroHisPacienteRepository } from 'src/his/maestro-his-paciente.repository';
+import { VacunacionCitaRepository } from 'src/vacunacion-cita/vacunacion-cita.repository';
 
 @Module({
   providers: [PadronVacunadosService],
   controllers: [PadronVacunadosController],
-  imports:[TypeOrmModule.forFeature([PadronVacunadosRepository,MaestroHisPacienteRepository])]
+  imports:[TypeOrmModule.forFeature([PadronVacunadosRepository,MaestroHisPacienteRepository,VacunacionCitaRepository])]
 })
 export class PadronVacunadosModule {}

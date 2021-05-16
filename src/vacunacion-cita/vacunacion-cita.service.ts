@@ -30,9 +30,7 @@ export class VacunacionCitaService {
     let orden = Math.trunc((punto_elegidoc.CUPO_ACTUAL % (punto_elegidoc.CUPOS_HORA * 6)) / punto_elegidoc.CUPOS_HORA)
     let orden_dia = Math.trunc(punto_elegidoc.CUPO_ACTUAL / (punto_elegidoc.CUPOS_HORA * 6))
 
-    console.log(orden)
-    console.log(orden_dia)
-    console.log(nuevacit)
+
 
     let nuevo = this.citarepo.create()
 
@@ -135,7 +133,7 @@ export class VacunacionCitaService {
     nuevo.FECHA_REGISTRO = new Date()
 
     nuevo.FECHA_PROGRAMADA_CITA = fecha
-    console.log(nuevo)
+
 
     let nuevo_guard = await this.citarepo.save(nuevo)
     console.log('nueva cita:' + nuevo_guard.numero_documento)

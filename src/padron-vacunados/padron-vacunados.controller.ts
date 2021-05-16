@@ -18,7 +18,7 @@ export class PadronVacunadosController {
 
         let resp = await this.padron.devolver_Vacunado(numdoc)
 
-        console.log(resp)
+   
 
         return resp
         /*
@@ -36,13 +36,14 @@ export class PadronVacunadosController {
 
         let resp = await this.padron.devolverVacunasHis(numdoc)
 
-        console.log(resp)
+      
 
         return resp
         /*
         return res*/
 
     }
+
 
 
 
