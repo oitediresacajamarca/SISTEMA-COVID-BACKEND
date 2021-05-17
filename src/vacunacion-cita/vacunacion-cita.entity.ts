@@ -36,6 +36,13 @@ export class VacunacionCitaEntity {
     FECHA_CITA:Date;
     @Column()
     HORARIO_CITA:String;
+    @Column()
+    EDAD:Number
+    @Column()
+    FECHA_NACIMIENTO:Number
+    @Column()
+    MENSAJE_SMS:string
+
 
 
 
