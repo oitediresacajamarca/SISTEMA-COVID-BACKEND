@@ -142,7 +142,7 @@ export class VacunacionCitaService {
 
     nuevo.FECHA_PROGRAMADA_CITA = fecha
     
-console.log(nuevo)
+
 
     let nuevo_guard = await this.citarepo.save(nuevo)
     console.log('nueva cita:' + nuevo_guard.numero_documento)
