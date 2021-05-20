@@ -72,12 +72,13 @@ export class PadronVacunadosService {
       }
 
 
-let datos_cita=await this.devolverCitas(dni)
+      let datos_cita = await this.devolverCitas(dni)
+   let datos_vacunas=  await this.devolverVacunasHis(dni)
 
 
 
 
-      dat = { ...daatos, ...dat ,citas:datos_cita};
+      dat = { ...daatos, ...dat, citas: datos_cita ,vacunas:datos_vacunas};
 
 
 
@@ -156,36 +157,36 @@ let datos_cita=await this.devolverCitas(dni)
 
       let resp = await fetch("https://websalud.minsa.gob.pe/hisminsa/his/paciente", {
          "headers": {
-           "accept": "*/*",
-           "accept-language": "es-ES,es;q=0.9,en;q=0.8",
-           "cache-control": "no-cache",
-           "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-           "pragma": "no-cache",
-           "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
-           "sec-ch-ua-mobile": "?0",
-           "sec-fetch-dest": "empty",
-           "sec-fetch-mode": "cors",
-           "sec-fetch-site": "same-origin",
-           "x-requested-with": "XMLHttpRequest",
-           "cookie": "JSESSIONID=DF3B76B333D4B19E84D30A3E0DDA892B; _ga_F4HY3YK7EH=GS1.1.1613481795.4.0.1613481795.0; _ga_LEDF527D3S=GS1.1.1615149485.2.0.1615149485.0; _ga_NWVQ3HSJKS=GS1.1.1616246531.42.0.1616246531.0; _ga_T513LTCYK1=GS1.1.1619054927.32.0.1619054927.0; _ga=GA1.3.1150659243.1611596987; __cfduid=d7241dd5a0233ce70e4ca2357878e69711619366672; rxVisitor=1620748251286V94U3C0F8IB7NJ25VP07IBFEVBL5SUSA; dtSa=-; dtLatC=1; byt=46ba10221b7e9964f6dc68ee91493c1d748cb43f5bde60bf8cc8f1ac9baf496bc68a96c302c1e93a03127a5b5148acc810f9ac8de8cc380a16519e3cc29e5640836a95b477d7c8446d05827a84ae1c35925e8294a505acb83897a65dbc5d02d4; dtPC=2$193877590_701h-vNEHICKPPEMKMIEFFAPPCJBGIHIDKCCCI; dtCookie=2$D25913E75A2BA5371D6010301A2D0311|HISMINSA|1|RUM+Default+Application|1; rxvt=1621395681873|1621392815862"
+            "accept": "*/*",
+            "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+            "cache-control": "no-cache",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "pragma": "no-cache",
+            "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-origin",
+            "x-requested-with": "XMLHttpRequest",
+            "cookie": "JSESSIONID=DF3B76B333D4B19E84D30A3E0DDA892B; _ga_F4HY3YK7EH=GS1.1.1613481795.4.0.1613481795.0; _ga_LEDF527D3S=GS1.1.1615149485.2.0.1615149485.0; _ga_NWVQ3HSJKS=GS1.1.1616246531.42.0.1616246531.0; _ga_T513LTCYK1=GS1.1.1619054927.32.0.1619054927.0; _ga=GA1.3.1150659243.1611596987; __cfduid=d7241dd5a0233ce70e4ca2357878e69711619366672; rxVisitor=1620748251286V94U3C0F8IB7NJ25VP07IBFEVBL5SUSA; dtSa=-; dtLatC=1; byt=46ba10221b7e9964f6dc68ee91493c1d748cb43f5bde60bf8cc8f1ac9baf496bc68a96c302c1e93a03127a5b5148acc810f9ac8de8cc380a16519e3cc29e5640836a95b477d7c8446d05827a84ae1c35925e8294a505acb83897a65dbc5d02d4; dtPC=2$193877590_701h-vNEHICKPPEMKMIEFFAPPCJBGIHIDKCCCI; dtCookie=2$D25913E75A2BA5371D6010301A2D0311|HISMINSA|1|RUM+Default+Application|1; rxvt=1621395681873|1621392815862"
          },
          "referrer": "https://websalud.minsa.gob.pe/hisminsa/",
          "referrerPolicy": "strict-origin-when-cross-origin",
-         "body": "C=PACIENTE&S=INFOGETBYID&idtipodoc=1&numdoc="+dni,
+         "body": "C=PACIENTE&S=INFOGETBYID&idtipodoc=1&numdoc=" + dni,
          "method": "POST",
          "mode": "cors"
-       });
+      });
 
       let respuesta1 = resp.body
 
 
-   
 
 
-   
 
 
-      let idpersona:any=  await new Promise((resolve, reject) => {
+
+
+      let idpersona: any = await new Promise((resolve, reject) => {
          let data = "";
 
          respuesta1.on("data", chunk => { data += chunk; });
@@ -194,65 +195,105 @@ let datos_cita=await this.devolverCitas(dni)
       });
 
 
-let person=JSON.parse(idpersona)
+      let person = JSON.parse(idpersona)
 
 
-      let primero=await fetch("https://websalud.minsa.gob.pe/hisminsa/his/his?_dc=1621393955744&confighistorialpacid=1&idtipodoc=1&numdoc="+dni+"&idpersona="+person.idpaciente+"&paciente=SANDRA%20TALIA%20ROJAS%20GARRO&fecnacimiento=07%2F10%2F1993&edadactual=27%20a%C3%B1o(s)%207%20mes(es)%2011%20d%C3%ADa(s)&C=HISTORIALATENCIONES&S=SEARCH&page=1&start=0&limit=25", {
+      let primero = await fetch("https://websalud.minsa.gob.pe/hisminsa/his/his?_dc=1621393955744&confighistorialpacid=1&idtipodoc=1&numdoc=" + dni + "&idpersona=" + person.idpaciente + "&paciente=SANDRA%20TALIA%20ROJAS%20GARRO&fecnacimiento=07%2F10%2F1993&edadactual=27%20a%C3%B1o(s)%207%20mes(es)%2011%20d%C3%ADa(s)&C=HISTORIALATENCIONES&S=SEARCH&page=1&start=0&limit=25", {
          "headers": {
-           "accept": "*/*",
-           "accept-language": "es-ES,es;q=0.9,en;q=0.8",
-           "cache-control": "no-cache",
-           "pragma": "no-cache",
-           "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
-           "sec-ch-ua-mobile": "?0",
-           "sec-fetch-dest": "empty",
-           "sec-fetch-mode": "cors",
-           "sec-fetch-site": "same-origin",
-           "x-requested-with": "XMLHttpRequest",
-           "cookie": "JSESSIONID=DF3B76B333D4B19E84D30A3E0DDA892B; _ga_F4HY3YK7EH=GS1.1.1613481795.4.0.1613481795.0; _ga_LEDF527D3S=GS1.1.1615149485.2.0.1615149485.0; _ga_NWVQ3HSJKS=GS1.1.1616246531.42.0.1616246531.0; _ga_T513LTCYK1=GS1.1.1619054927.32.0.1619054927.0; _ga=GA1.3.1150659243.1611596987; __cfduid=d7241dd5a0233ce70e4ca2357878e69711619366672; rxVisitor=1620748251286V94U3C0F8IB7NJ25VP07IBFEVBL5SUSA; dtSa=-; dtLatC=1; byt=46ba10221b7e9964f6dc68ee91493c1d748cb43f5bde60bf8cc8f1ac9baf496bc68a96c302c1e93a03127a5b5148acc810f9ac8de8cc380a16519e3cc29e5640836a95b477d7c8446d05827a84ae1c35925e8294a505acb83897a65dbc5d02d4; dtPC=2$193877590_701h-vNEHICKPPEMKMIEFFAPPCJBGIHIDKCCCI; dtCookie=2$D25913E75A2BA5371D6010301A2D0311|HISMINSA|1|RUM+Default+Application|1; rxvt=1621395681873|1621392815862"
+            "accept": "*/*",
+            "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+            "cache-control": "no-cache",
+            "pragma": "no-cache",
+            "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-origin",
+            "x-requested-with": "XMLHttpRequest",
+            "cookie": "JSESSIONID=DF3B76B333D4B19E84D30A3E0DDA892B; _ga_F4HY3YK7EH=GS1.1.1613481795.4.0.1613481795.0; _ga_LEDF527D3S=GS1.1.1615149485.2.0.1615149485.0; _ga_NWVQ3HSJKS=GS1.1.1616246531.42.0.1616246531.0; _ga_T513LTCYK1=GS1.1.1619054927.32.0.1619054927.0; _ga=GA1.3.1150659243.1611596987; __cfduid=d7241dd5a0233ce70e4ca2357878e69711619366672; rxVisitor=1620748251286V94U3C0F8IB7NJ25VP07IBFEVBL5SUSA; dtSa=-; dtLatC=1; byt=46ba10221b7e9964f6dc68ee91493c1d748cb43f5bde60bf8cc8f1ac9baf496bc68a96c302c1e93a03127a5b5148acc810f9ac8de8cc380a16519e3cc29e5640836a95b477d7c8446d05827a84ae1c35925e8294a505acb83897a65dbc5d02d4; dtPC=2$193877590_701h-vNEHICKPPEMKMIEFFAPPCJBGIHIDKCCCI; dtCookie=2$D25913E75A2BA5371D6010301A2D0311|HISMINSA|1|RUM+Default+Application|1; rxvt=1621395681873|1621392815862"
          },
          "referrer": "https://websalud.minsa.gob.pe/hisminsa/",
          "referrerPolicy": "strict-origin-when-cross-origin",
          "body": null,
          "method": "GET",
          "mode": "cors"
-       });
+      });
+
+
+
+
+      let stre = primero.body
+
+
+
+
+
+
+
+      let vacunas: any = await new Promise((resolve, reject) => {
+         let data = "";
+
+         stre.on("data", chunk => { data += chunk; });
+         stre.on("end", () => { resolve(data); });
+         stre.on("error", error => reject(error));
+      });
+
+
+      let vacunas_array: any[] = JSON.parse(vacunas).items
+      let respuesta: any = {}
+      if (vacunas_array.length > 0) {
+         respuesta.tiene_dosis = true
+      }
+
+
+      respuesta.dosis_programar = 1
+      let solo_dosis = vacunas_array.filter((v) => {
 
      
 
 
-       let stre = primero.body
+         return v.coditem == "90749.01"
+      })
 
 
 
+      let primera_dosis = solo_dosis.findIndex((dosis) => { return dosis.valorlab == 1||dosis.valorlab == 'D1' })
 
-   
-
-
-     let vacunas:any=  await new Promise((resolve, reject) => {
-          let data = "";
- 
-          stre.on("data", chunk => { data += chunk; });
-          stre.on("end", () => { resolve(data); });
-          stre.on("error", error => reject(error));
-       });
-
+      let segunda_dosis = solo_dosis.findIndex((dosis) => { return dosis.valorlab == 2 ||dosis.valorlab == 'D2'})
   
-       let vacunas_array:any[]=JSON.parse(vacunas).items
+      if (primera_dosis >= 0 && segunda_dosis < 0) {
 
-
-    return   vacunas_array.filter((v)=>{
-
-         return v.coditem=="90749.01"
-       })
+         respuesta.dosis_programar = 2
+      }
 
 
 
+
+      if (primera_dosis < 0 && segunda_dosis < 0) {
+
+         respuesta.dosis_programar = 1
+      }
+
+      if (primera_dosis >= 0 && segunda_dosis >= 0) {
+
+         respuesta.dosis_programar = 'ninguna'
+      }
+
+
+
+
+
+
+      respuesta.dosis = solo_dosis
+
+
+
+      return respuesta
 
 
    }
 
-   async devolver_vac(){
+   async devolver_vac() {
 
 
 

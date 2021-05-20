@@ -75,7 +75,7 @@ export class VacunacionCitaService {
       nuevo.FECHA_CITA = new Date(fecha_respuesta.getFullYear(),fecha_respuesta.getMonth(),(fecha_respuesta.getDate()+1))
       nuevo.HORARIO_CITA = mensaje.intervalo
 
-      let link="https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message=Sr(a) "+nuevacit.ape_paterno+" "+nuevacit.ape_materno+" "+nuevacit.nombres+" con dni "+nuevacit.numero_documento+". Su cita  para la vacunacion Anticovid es para el dia " + fecha_respuesta.getDate() + "/" + (fecha_respuesta.getMonth() + 1).toString() + "/" + fecha_respuesta.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1"
+      let link="https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message=GORECAJ  Sr(a) "+nuevacit.ape_paterno+" "+nuevacit.ape_materno+" "+nuevacit.nombres+" con dni "+nuevacit.numero_documento+". Su cita  para la vacunacion Anticovid es para el dia " + fecha_respuesta.getDate() + "/" + (fecha_respuesta.getMonth() + 1).toString() + "/" + fecha_respuesta.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1"
 
       if(nuevacit.NUMERO_TELEFONO=='942149115'){
       
@@ -83,8 +83,8 @@ export class VacunacionCitaService {
         
       }
 
-      nuevo.MENSAJE_SMS="https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message= Su cita  para la vacunacion Anticovid es para el dia " + fecha_respuesta.getDate() + "/" + (fecha_respuesta.getMonth() + 1).toString() + "/" + fecha_respuesta.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1"
-      fetch(encodeURI(link)+ "  &messageFormat=1", {
+      nuevo.MENSAJE_SMS=link
+      fetch(encodeURI(link), {
         "headers": {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
           "accept-language": "es-ES,es;q=0.9,en;q=0.8",
@@ -254,7 +254,7 @@ export class VacunacionCitaService {
     if (!(resp_punto.CITAR_HABILITADO == 'HABILITADO' && data.edad >= resp_punto.EDAD_CITA)) {
 
 
-      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + data.NUMERO_TELEFONO + "&country=51&message= Su registro se ha guardado correctamente. Pronto se le comunicara la fecha y la hora de su cita. 'NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
+      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + data.NUMERO_TELEFONO + "&country=51&message=GORECAJ Su registro se ha guardado correctamente. Pronto se le comunicara la fecha y la hora de su cita. 'NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
         "headers": {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
           "accept-language": "es-ES,es;q=0.9,en;q=0.8",
