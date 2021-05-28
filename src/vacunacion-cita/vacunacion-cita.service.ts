@@ -13,6 +13,7 @@ const fetch = require('node-fetch');
 var fs = require('file-system');
 const nodemailer = require("nodemailer");
 const clien = require("twilio")('AC78e305b479db052ec298256587cc4a62', 'e3c57a30d44fe1b12a42b7205cae3405');
+import * as moment from 'moment';
 
 @Injectable()
 export class VacunacionCitaService {
@@ -69,21 +70,24 @@ export class VacunacionCitaService {
         mensaje = { intervalo: 'DE 3 A 4 PM' }
 
       }
+      console.log(fecha_respuesta)
+      console.log(orden)
+      console.log(orden_dia)
 
-      mensaje.fecha = new Date(fecha_respuesta.setDate(fecha_respuesta.getDate() + orden_dia))
+      mensaje.fecha = moment([fecha_respuesta.getFullYear(), fecha_respuesta.getMonth(), fecha_respuesta.getDate()]).add(orden_dia).toDate()
 
-      nuevo.FECHA_CITA = new Date(fecha_respuesta.getFullYear(),fecha_respuesta.getMonth(),(fecha_respuesta.getDate()+1))
+      nuevo.FECHA_CITA = mensaje.fecha
       nuevo.HORARIO_CITA = mensaje.intervalo
 
-      let link="https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message=GORECAJ  Sr(a) "+nuevacit.ape_paterno+" "+nuevacit.ape_materno+" "+nuevacit.nombres+" con dni "+nuevacit.numero_documento+". Su cita  para la vacunacion Anticovid es para el dia " + fecha_respuesta.getDate() + "/" + (fecha_respuesta.getMonth() + 1).toString() + "/" + fecha_respuesta.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1"
+      let link = "https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message=GORECAJ  Sr(a) " + nuevacit.ape_paterno + " " + nuevacit.ape_materno + " " + nuevacit.nombres + " con dni " + nuevacit.numero_documento + ". Su cita  para la vacunacion Anticovid es para el dia " + fecha_respuesta.getDate() + "/" + (fecha_respuesta.getMonth() + 1).toString() + "/" + fecha_respuesta.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1"
 
-      if(nuevacit.NUMERO_TELEFONO=='942149115'){
-      
-      
-        
+      if (nuevacit.NUMERO_TELEFONO == '942149115') {
+
+
+
       }
 
-      nuevo.MENSAJE_SMS=link
+      nuevo.MENSAJE_SMS = link
       fetch(encodeURI(link), {
         "headers": {
           "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -105,7 +109,7 @@ export class VacunacionCitaService {
         "method": "GET",
         "mode": "cors"
       }).then((data) => {
-        console.log(data)
+
       })
 
 
@@ -132,7 +136,7 @@ export class VacunacionCitaService {
     punto_elegidoc.CUPO_ACTUAL = punto_elegidoc.CUPO_ACTUAL + 1;
     punto_elegidoc.FECHA_ULTIMO_CUPO = fecha
 
-   
+
     this.PuntoVacunacionRepositor.save(punto_elegidoc)
 
 
@@ -140,33 +144,35 @@ export class VacunacionCitaService {
     Object.assign(nuevo, nuevacit)
     nuevo.FECHA_REGISTRO = new Date()
 
+
     nuevo.FECHA_PROGRAMADA_CITA = fecha
-    
 
 
-    let nuevo_guard = await this.citarepo.save(nuevo)
+    let vacunacion_adap: any = nuevo
+    if (vacunacion_adap.FECHA_NACIMIENTO.day != undefined) {
+      vacunacion_adap.FECHA_NACIMIENTO = moment([vacunacion_adap.FECHA_NACIMIENTO.year, vacunacion_adap.FECHA_NACIMIENTO.month - 1, vacunacion_adap.FECHA_NACIMIENTO.day + 1]).toDate()
+
+    }
+    vacunacion_adap.FECHA_CITA = moment([nuevo.FECHA_CITA.getFullYear(), nuevo.FECHA_CITA.getMonth(), nuevo.FECHA_CITA.getDate()]).add(1, 'day').toDate()
+
+    vacunacion_adap.EDAD=vacunacion_adap.edad
+    console.log(vacunacion_adap)
+
+    let nuevo_guard = await this.citarepo.save(vacunacion_adap)
+
+
     console.log('nueva cita:' + nuevo_guard.numero_documento)
     return { ...nuevo_guard, mensaje: mensaje }
 
 
   }
 
-  async consultar_cita() {
 
-    let JSON1 = await this.citarepo.find();
-    JSON.stringify(JSON1)
-
-    var xls = json2xls(JSON1);
-
-    return xls;
-
-
-    // fs.writeFileSync('data.xlsx', xls, 'binary');
-
-  }
 
 
   async actualizar_data(data: FormularioReqInterface) {
+    
+    let fecha_actual = new Date();
 
     data.Fecha_Registro = new Date()
     data.ETIQUETA = "CARGADO POR EL SISTEMA"
@@ -192,8 +198,7 @@ export class VacunacionCitaService {
 
 
       } else {
-        /*  console.log("menor 80")
-          console.log(resp)*/
+
       }
 
 
@@ -206,8 +211,11 @@ export class VacunacionCitaService {
     else {
 
 
-      data.edad = (new Date()).getFullYear() - (data.FECHA_NACIMIENTO).getFullYear()
 
+
+      data.edad = moment([fecha_actual.getFullYear(), fecha_actual.getMonth(), fecha_actual.getDate()]).diff(data.FECHA_NACIMIENTO, 'years')
+      console.log(data)
+  
 
       resp = await this.actuadata.save(data)
 
@@ -219,7 +227,6 @@ export class VacunacionCitaService {
     }
 
     const resp_punto = await this.PuntoVacunacionRepositor.findOne({ where: { _NOMBRE_PUNTO_VACUNACION_: data.NOMBRE_PUNTO_VACUNACION } })
-
 
 
 
@@ -249,9 +256,14 @@ export class VacunacionCitaService {
          to:'+51942149115',
          from:process.env.CUENTA_TWILIO_PHONE_NUMBER_FROM,
          body:'DIRESA CAJAMARCA le Informa sus datos han sido actualizados correctamente pronto nuestro personal se comunicara con usted'
+         
      }).then(message=>console.log(message))*/
 
+
+
     if (!(resp_punto.CITAR_HABILITADO == 'HABILITADO' && data.edad >= resp_punto.EDAD_CITA)) {
+
+
 
 
       fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + data.NUMERO_TELEFONO + "&country=51&message=GORECAJ Su registro se ha guardado correctamente. Pronto se le comunicara la fecha y la hora de su cita. 'NO SE ATENDERA SIN PREVIA CITA'&messageFormat=1", {
@@ -275,9 +287,49 @@ export class VacunacionCitaService {
         "method": "GET",
         "mode": "cors"
       }).then((data) => {
-        //  console.log(data)
+
       })
+
+
+
+
+
     }
+
+
+
+    if (data.edad < resp_punto.EDAD_CITA) {
+
+      fetch("https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + data.NUMERO_TELEFONO +
+        "&country=51&message=GORECAJ Su registro se ha guardado correctamente. El grupo de edad priorizado actual es mayor a " + resp_punto.EDAD_CITA + " años. 'Se le informara el momento cuando se encuentre dentro de la edad priorisada'&messageFormat=1", {
+        "headers": {
+          "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+          "cache-control": "no-cache",
+          "pragma": "no-cache",
+          "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-fetch-dest": "document",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-site": "none",
+          "sec-fetch-user": "?1",
+          "upgrade-insecure-requests": "1",
+          "cookie": "_ga=GA1.2.794645600.1620680365; _gid=GA1.2.1384613325.1620680365",
+          "Authorization": "Basic RElSRVNBQ2FqYW1hcmNhOkRpcmVzYXNtcyQ="
+        },
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": null,
+        "method": "GET",
+        "mode": "cors"
+      }).then((data) => {
+
+      })
+
+
+
+
+    }
+
 
 
 

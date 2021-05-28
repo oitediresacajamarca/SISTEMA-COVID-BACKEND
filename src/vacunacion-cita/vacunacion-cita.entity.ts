@@ -32,14 +32,14 @@ export class VacunacionCitaEntity {
     @Column()
     FECHA_PROGRAMADA_CITA:Date;
 
-    @Column()
+    @Column({ type: 'date' })
     FECHA_CITA:Date;
     @Column()
     HORARIO_CITA:String;
     @Column()
     EDAD:Number
     @Column()
-    FECHA_NACIMIENTO:Number
+    FECHA_NACIMIENTO:Date
     @Column()
     MENSAJE_SMS:string
 

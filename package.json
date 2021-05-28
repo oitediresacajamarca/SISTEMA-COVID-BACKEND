@@ -33,6 +33,7 @@
     "dotenv": "^8.2.0",
     "file-system": "^2.2.2",
     "json2xls": "^0.1.2",
+    "moment": "^2.29.1",
     "mongoose": "^5.10.7",
     "mssql": "^5.1.1",
     "node-fetch": "^2.6.1",

@@ -13,8 +13,8 @@ export class VacunacionCitaController {
     @Post('citar')
     async CitarPaciente(@Body() consulta: any) {
         
-        console.log('la consulta es')
-        console.log(consulta)
+        console.log('la cita es')
+        console.log(consulta.numero_documento)
       
 
 
@@ -30,10 +30,9 @@ export class VacunacionCitaController {
         res.header('Content-Type', 'pplication/vnd.ms-excel');
         res.header('Content-Disposition', 'attachment;filename=\"' + encodeURIComponent('dtos.xlsx') + '\"');
 
-        let resp = await this.vacunacion_service.consultar_cita()
+  
 
-
-        res.end(resp)
+ 
 
 
     }
@@ -43,9 +42,9 @@ export class VacunacionCitaController {
     async actualizarData(@Body() body:any) {
         //res.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         let bodys:FormularioReqInterface=body
-        console.log('veee')
+  
     
-   console.log(body)
+
 
 
         if (body.FECHA_NACIMIENTO.day==undefined) {

@@ -1,24 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { Console } from 'console';
+
 import { MaestroHisPacienteRepository } from 'src/his/maestro-his-paciente.repository';
 import { VacunacionCitaRepository } from 'src/vacunacion-cita/vacunacion-cita.repository';
-import { Stream } from 'stream';
+
 import { Datosreniec } from './interfaces/datosreniec.interface';
 import { PadronVacunadosEntity } from './padron-vacunados.entity';
 import { PadronVacunadosRepository } from './padron-vacunados.repository';
 const fetch = require('node-fetch');
+import * as moment from 'moment';
+import { ActualizaDataRepository } from 'src/vacunacion-cita/actualiza-data.repository';
+import { getDefaultSettings } from 'http2';
 
 @Injectable()
 export class PadronVacunadosService {
-   constructor(private padronServic: PadronVacunadosRepository, private maestroRep: MaestroHisPacienteRepository, private cita_servicio: VacunacionCitaRepository) {
+   constructor(private padronServic: PadronVacunadosRepository, private maestroRep: MaestroHisPacienteRepository,
+      private cita_servicio: VacunacionCitaRepository, private padron_actual: ActualizaDataRepository) {
 
    }
    async devolver_Vacunado(dni: string) {
 
 
+
       let daatos: PadronVacunadosEntity = this.padronServic.create()
       let datos_reniec: any
-      let dat = {}
+      let dat: any = {}
 
 
 
@@ -50,35 +55,55 @@ export class PadronVacunadosService {
       }
 
       datos_reniec = await this.devolverReniecData(dni)
+      let edad_descripcion: any = {}
 
       datos_reniec = JSON.parse(datos_reniec)
       if (datos_reniec.fechnacpac != undefined) {
 
          let fechaarray = datos_reniec.fechnacpac.split('/')
          let fec_nac_reniec = new Date(parseInt(fechaarray[2]), parseInt(fechaarray[1]) - 1, parseInt(fechaarray[0]))
+         let fecha_actual = new Date()
+
+
+         var a = moment([parseInt(fechaarray[2]), parseInt(fechaarray[1]) - 1, parseInt(fechaarray[0])]);
+         var b = moment([fecha_actual.getFullYear(), fecha_actual.getMonth(), fecha_actual.getDate()]);
+
+         var diffDuration = moment.duration(b.diff(a));
+
 
          daatos = {
             Numero_de_Documento: datos_reniec.numdoc,
             Apellido_Paterno: datos_reniec.apelpatpac, Apellido_Materno: datos_reniec.apelmatpac
             , DIRIS: 'CAJAMARCA', Departamento: 'CAJAMARCA', Departamento_RENIEC: '', Direccion_RENIEC: datos_reniec.direccion,
-            Distrito_RENIEC: '', Distrito: '', Edad: (new Date()).getFullYear() - fec_nac_reniec.getFullYear(),
+            Distrito_RENIEC: '', Distrito: '', Edad: diffDuration.years(),
             Provincia: '', Fuente_Datos: 'reniec', Nombre_EESS: '', Nombres: datos_reniec.nombpac, Provincia_RENIEC: '',
             Tipo_de_Documento: 1,
-            FECHA_NACIMIENTO: fec_nac_reniec
+            FECHA_NACIMIENTO: fec_nac_reniec,
+
          }
+
+         edad_descripcion.anios = diffDuration.years()
+         edad_descripcion.meses = diffDuration.months()
+         edad_descripcion.dias = diffDuration.days()
       } else {
 
          dat = { mensaje: { existeenpadron: false, existeenhis: true, datos_erroneos: true } }
       }
 
+      let datos_padron_actual = await this.padron_actual.findOne({ where: { numero_documento: dni } })
+     
+      if (datos_padron_actual != undefined) {
+         dat.mensaje.en_padron_actual = true
+      } else {
+         dat.mensaje.en_padron_actual = false
+      }
+      let datos_cita = await this.devolverCitasPendientes(dni)
+      let datos_vacunas = await this.devolverVacunasHis(dni)
 
-      let datos_cita = await this.devolverCitas(dni)
-   let datos_vacunas=  await this.devolverVacunasHis(dni)
 
 
 
-
-      dat = { ...daatos, ...dat, citas: datos_cita ,vacunas:datos_vacunas};
+      dat = { ...daatos, ...dat, citas: datos_cita, vacunas: datos_vacunas, edad_descripcion };
 
 
 
@@ -97,6 +122,23 @@ export class PadronVacunadosService {
 
       let datos_cita = await this.cita_servicio.find({ where: { numero_documento: num_doc } })
       return datos_cita
+
+   }
+
+   async devolverCitasPendientes(num_doc: string) {
+
+   let fecha_actual=   new Date()
+      let datos_cita = await this.cita_servicio.find({ where: { numero_documento: num_doc } })
+
+   let citas_pendientes=   datos_cita.filter(cita=>{
+  
+         return  moment(fecha_actual).isSameOrBefore(moment(cita.FECHA_CITA),'day')
+
+     
+      })
+
+
+      return citas_pendientes
 
    }
 
@@ -249,7 +291,7 @@ export class PadronVacunadosService {
       respuesta.dosis_programar = 1
       let solo_dosis = vacunas_array.filter((v) => {
 
-     
+
 
 
          return v.coditem == "90749.01"
@@ -257,13 +299,20 @@ export class PadronVacunadosService {
 
 
 
-      let primera_dosis = solo_dosis.findIndex((dosis) => { return dosis.valorlab == 1||dosis.valorlab == 'D1' })
+      let primera_dosis = solo_dosis.findIndex((dosis) => { return dosis.valorlab == 1 || dosis.valorlab == 'D1' })
 
-      let segunda_dosis = solo_dosis.findIndex((dosis) => { return dosis.valorlab == 2 ||dosis.valorlab == 'D2'})
-  
+      let segunda_dosis = solo_dosis.findIndex((dosis) => { return dosis.valorlab == 2 || dosis.valorlab == 'D2' })
+
       if (primera_dosis >= 0 && segunda_dosis < 0) {
 
+
          respuesta.dosis_programar = 2
+         let fecha_1dosis = this.parcearFecha(solo_dosis[primera_dosis].periodo)
+
+
+         respuesta.fecha_dosis_siguiente = moment([fecha_1dosis.getFullYear(), fecha_1dosis.getMonth(), fecha_1dosis.getDate()]).add(21, 'days').toDate()
+
+
       }
 
 
@@ -299,6 +348,15 @@ export class PadronVacunadosService {
 
 
 
+
+   }
+
+   parcearFecha(fecha: string) {
+
+
+      let fechaarray = fecha.split('/')
+      let fec_nac_reniec = new Date(parseInt(fechaarray[2]), parseInt(fechaarray[1]) - 1, parseInt(fechaarray[0]))
+      return fec_nac_reniec
 
    }
 
