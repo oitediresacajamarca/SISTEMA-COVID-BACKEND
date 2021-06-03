@@ -11,4 +11,12 @@ export class PuntoVacunacionController {
       let resp=await  this.puntos.devolver_Puntos_Por_Distrito(distrito)
       return resp
     }
+
+    @Get('punto/:nombre_punto')
+    async devolver_punto(@Param('nombre_punto') nombre_punto:string){
+    
+      let resp=await  this.puntos.devolver_Punto(nombre_punto)
+      return resp
+    }
+    
 }

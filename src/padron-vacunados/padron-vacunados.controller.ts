@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Response } from '@nestjs/common';
+import { Controller, Get, Param, Post, Response } from '@nestjs/common';
 import { rejects } from 'assert';
 import { resolve } from 'path';
 import { PadronVacunadosService } from './padron-vacunados.service';
@@ -10,7 +10,7 @@ export class PadronVacunadosController {
     constructor(private padron: PadronVacunadosService) {
 
     }
-    @Get(':num_doc')
+    @Post(':num_doc')
     async devolverVacunado(@Param('num_doc') numdoc: string) {
         console.log('consulto')
         console.log(numdoc)

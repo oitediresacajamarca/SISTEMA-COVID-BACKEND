@@ -47,27 +47,31 @@ export class VacunacionCitaService {
       }
 
       if (orden == 1) {
-        mensaje = { intervalo: 'DE 10 A 11 AM' }
+        mensaje = { intervalo: 'DE 9 A 10 AM' }
 
       }
 
       if (orden == 2) {
-        mensaje = { intervalo: 'DE 11 A 12 AM' }
+        mensaje = { intervalo: 'DE 10 A 11 AM' }
 
       }
 
       if (orden == 3) {
-        mensaje = { intervalo: 'DE 12 A 1 PM' }
+        mensaje = { intervalo: 'DE 11 A 12 PM' }
 
       }
 
       if (orden == 4) {
-        mensaje = { intervalo: 'DE 1 A 2 PM' }
+        mensaje = { intervalo: 'DE 12 PM A 1 PM' }
 
       }
 
       if (orden == 5) {
-        mensaje = { intervalo: 'DE 3 A 4 PM' }
+        mensaje = { intervalo: 'DE 1 A 2 PM' }
+
+      }
+      if (orden == 5) {
+        mensaje = { intervalo: 'DE 2 PM A 3 PM' }
 
       }
       console.log(fecha_respuesta)

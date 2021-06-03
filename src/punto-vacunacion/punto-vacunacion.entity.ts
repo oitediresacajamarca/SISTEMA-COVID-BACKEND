@@ -19,21 +19,27 @@ export class PuntoVacunacionEntity {
     @Column()
     UBIGEO: string;
     @Column()
-    CUPO_ACTUAL:number;
+    CUPO_ACTUAL: number;
     @Column()
-    FECHA_ULTIMO_CUPO:Date;
+    FECHA_ULTIMO_CUPO: Date;
     @Column()
-    EDAD_CITA:number;
+    EDAD_CITA: number;
     @Column()
-    ESTADO:string;
-   
+    ESTADO: string;
     @Column()
-    CITAR_HABILITADO:string
-     @Column()
-    FORMA_CITA:string;
+    CITAR_HABILITADO: string
     @Column()
-    CUPOS_HORA:number;
-   
+    FORMA_CITA: string;
     @Column()
-    FECHA_INICIO_PROGRAMA:Date
+    CUPOS_HORA: number;
+    @Column()
+    FECHA_INICIO_PROGRAMA: Date;
+    @Column()
+    TIPO: string;
+    @Column()
+    HORARIO_DISPONIBLE_ACTUAL:string;
+    @Column()
+    ORDEN_HORA_INICIO: number;
+    @Column()
+    ORDEN_HORA_FIN: number;
 }
