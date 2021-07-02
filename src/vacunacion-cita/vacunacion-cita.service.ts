@@ -23,8 +23,9 @@ export class VacunacionCitaService {
 
   }
   async nuevaCita(nuevacit: VacunacionCita) {
+    console.log('nuevas 26')
 
-
+    console.log(nuevacit)
 
     let punto_elegidoc = await this.PuntoVacunacionRepositor.findOne({ _NOMBRE_PUNTO_VACUNACION_: nuevacit.NOMBRE_PUNTO_VACUNACION })
 
@@ -35,10 +36,17 @@ export class VacunacionCitaService {
 
     let nuevo = this.citarepo.create()
 
-    let mensaje
+    let mensaje:any={}
     let fecha = punto_elegidoc.FECHA_ULTIMO_CUPO
+
     let fecha_respuesta = punto_elegidoc.FECHA_INICIO_PROGRAMA
-    if (punto_elegidoc.FORMA_CITA = 'PPH') {
+
+    if (punto_elegidoc.FORMA_CITA = 'PPHA') {
+      let adap: any = nuevacit
+      orden = adap.CITA.ORDEN_HORA
+      orden_dia = adap.CITA.ORDEN_DIA
+    }
+    if (punto_elegidoc.FORMA_CITA == 'PPH' || punto_elegidoc.FORMA_CITA == 'PPHA') {
 
 
       if (orden == 0) {
@@ -74,11 +82,9 @@ export class VacunacionCitaService {
         mensaje = { intervalo: 'DE 2 PM A 3 PM' }
 
       }
-      console.log(fecha_respuesta)
-      console.log(orden)
-      console.log(orden_dia)
+console.log(fecha_respuesta.getFullYear())
 
-      mensaje.fecha = moment([fecha_respuesta.getFullYear(), fecha_respuesta.getMonth(), fecha_respuesta.getDate()]).add(orden_dia).toDate()
+      mensaje.fecha = moment([fecha_respuesta.getFullYear(), fecha_respuesta.getMonth(), fecha_respuesta.getDate()]).add('day',orden_dia).toDate()
 
       nuevo.FECHA_CITA = mensaje.fecha
       nuevo.HORARIO_CITA = mensaje.intervalo
@@ -154,12 +160,17 @@ export class VacunacionCitaService {
 
     let vacunacion_adap: any = nuevo
     if (vacunacion_adap.FECHA_NACIMIENTO.day != undefined) {
-      vacunacion_adap.FECHA_NACIMIENTO = moment([vacunacion_adap.FECHA_NACIMIENTO.year, vacunacion_adap.FECHA_NACIMIENTO.month - 1, vacunacion_adap.FECHA_NACIMIENTO.day + 1]).toDate()
+      vacunacion_adap.FECHA_NACIMIENTO = moment([vacunacion_adap.FECHA_NACIMIENTO.year, vacunacion_adap.FECHA_NACIMIENTO.month-1, vacunacion_adap.FECHA_NACIMIENTO.day]).add(1,'day').toDate()
 
     }
     vacunacion_adap.FECHA_CITA = moment([nuevo.FECHA_CITA.getFullYear(), nuevo.FECHA_CITA.getMonth(), nuevo.FECHA_CITA.getDate()]).add(1, 'day').toDate()
 
-    vacunacion_adap.EDAD=vacunacion_adap.edad
+    vacunacion_adap.EDAD = vacunacion_adap.edad
+
+    vacunacion_adap.ORDEN_DIA = vacunacion_adap.CITA.ORDEN_DIA
+    vacunacion_adap.ORDEN_HORA = vacunacion_adap.CITA.ORDEN_HORA
+    console.log('lineaa 169')
+
     console.log(vacunacion_adap)
 
     let nuevo_guard = await this.citarepo.save(vacunacion_adap)
@@ -175,7 +186,7 @@ export class VacunacionCitaService {
 
 
   async actualizar_data(data: FormularioReqInterface) {
-    
+
     let fecha_actual = new Date();
 
     data.Fecha_Registro = new Date()
@@ -219,7 +230,7 @@ export class VacunacionCitaService {
 
       data.edad = moment([fecha_actual.getFullYear(), fecha_actual.getMonth(), fecha_actual.getDate()]).diff(data.FECHA_NACIMIENTO, 'years')
       console.log(data)
-  
+
 
       resp = await this.actuadata.save(data)
 
@@ -263,6 +274,8 @@ export class VacunacionCitaService {
          
      }).then(message=>console.log(message))*/
 
+
+if(resp_punto!= undefined){
 
 
     if (!(resp_punto.CITAR_HABILITADO == 'HABILITADO' && data.edad >= resp_punto.EDAD_CITA)) {
@@ -334,7 +347,7 @@ export class VacunacionCitaService {
 
     }
 
-
+  }
 
 
     return { ...resp, punto: resp_punto }

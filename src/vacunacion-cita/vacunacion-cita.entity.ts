@@ -30,19 +30,23 @@ export class VacunacionCitaEntity {
     @Column()
     nombres: String;
     @Column()
-    FECHA_PROGRAMADA_CITA:Date;
+    FECHA_PROGRAMADA_CITA: Date;
     @Column({ type: 'date' })
-    FECHA_CITA:Date;
+    FECHA_CITA: Date;
     @Column()
-    HORARIO_CITA:String;
+    HORARIO_CITA: String;
     @Column()
-    EDAD:Number
+    EDAD: Number
     @Column()
-    FECHA_NACIMIENTO:Date
+    FECHA_NACIMIENTO: Date
     @Column()
-    MENSAJE_SMS:string;    
+    MENSAJE_SMS: string;
     @Column()
-    FECHA_REGISTRO:Date;
+    FECHA_REGISTRO: Date;
     @Column()
-    MOTIVO :string;
+    ORDEN_HORA: string;
+    @Column()
+    ORDEN_DIA: string;
+    @Column()
+    MOTIVO: string;
 }

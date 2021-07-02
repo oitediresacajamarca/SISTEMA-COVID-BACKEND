@@ -7,7 +7,7 @@ export class HisMinsaService {
 
     async validar_dni(dni:string){
 
-        console.log(dni)
+ 
 
   return  await    fetch("https://websalud.minsa.gob.pe/hisminsa/his/personal", {
         "headers": {
