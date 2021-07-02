@@ -55,7 +55,7 @@ export class PadronVacunadosService {
       }
 
       datos_reniec = await this.devolverReniecData(dni)
-      console.log(datos_reniec)
+
       let edad_descripcion: any = {}
 
       datos_reniec = JSON.parse(datos_reniec)
