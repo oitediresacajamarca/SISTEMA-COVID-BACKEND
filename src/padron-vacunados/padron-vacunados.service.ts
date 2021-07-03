@@ -20,7 +20,6 @@ export class PadronVacunadosService {
    async devolver_Vacunado(dni: string) {
 
 
-
       let daatos: PadronVacunadosEntity = this.padronServic.create()
       let datos_reniec: any
       let dat: any = {}
@@ -100,20 +99,52 @@ export class PadronVacunadosService {
       }
       let datos_cita = await this.devolverCitasPendientes(dni)
       let datos_vacunas = await this.devolverVacunasHis(dni)
+      console.log(datos_vacunas)
+
+      var ultimoCaracter = daatos.Numero_de_Documento.charAt(daatos.Numero_de_Documento.length - 1);
+
+      console.log(ultimoCaracter)
+      if(datos_vacunas.dosis_programar==1|| datos_vacunas.dosis_programar==2){
+      if(ultimoCaracter=='0'||ultimoCaracter=='1'||ultimoCaracter=='2'||ultimoCaracter=='3'){
+       
+
+         dat.mensaje.fecha_asignada =new Date(2021,6,5)
+      }
+
+      if(ultimoCaracter=='4'||ultimoCaracter=='5'||ultimoCaracter=='6'){
+       
+
+         dat.mensaje.fecha_asignada =new Date(2021,6,6)
+      }
+
+      if(ultimoCaracter=='7'||ultimoCaracter=='8'||ultimoCaracter=='9'){
+       
+
+         dat.mensaje.fecha_asignada =new Date(2021,6,7)
+      }
+   }
+if(datos_vacunas.dosis_programar==2){
+   let fecha_siguiente_dosis=dat.mensaje.fecha_asignada
+   if(moment(fecha_siguiente_dosis).diff(datos_vacunas.fecha_dosis_siguiente,'days')>=0){
+     /*  console.log('129')
+      console.log(fecha_siguiente_dosis)*/
+
+      dat.mensaje.fecha_asignada=dat.mensaje.fecha_asignada
+
+   }else{
+      dat.mensaje.fecha_asignada=datos_vacunas.fecha_dosis_siguiente
+   }
+
+}
 
 
-
+      dat.mensaje.ultimoCaracter=ultimoCaracter
+   
 
       dat = { ...daatos, ...dat, citas: datos_cita, vacunas: datos_vacunas, edad_descripcion };
 
 
-
       return dat;
-
-
-
-
-
 
 
    }
@@ -256,7 +287,7 @@ export class PadronVacunadosService {
          },
          "referrer": "https://websalud.minsa.gob.pe/hisminsa/",
          "referrerPolicy": "strict-origin-when-cross-origin",
-         "body": "C=PACIENTE&S=INFOGETBYID&idtipodoc=2&numdoc=" + dni,
+         "body": "C=PACIENTE&S=INFOGETBYID&idtipodoc=1&numdoc=" + dni,
          "method": "POST",
          "mode": "cors"
       });

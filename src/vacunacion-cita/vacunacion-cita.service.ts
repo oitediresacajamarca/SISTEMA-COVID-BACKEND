@@ -14,6 +14,7 @@ var fs = require('file-system');
 const nodemailer = require("nodemailer");
 const clien = require("twilio")('AC78e305b479db052ec298256587cc4a62', 'e3c57a30d44fe1b12a42b7205cae3405');
 import * as moment from 'moment';
+import { type } from 'os';
 
 @Injectable()
 export class VacunacionCitaService {
@@ -23,14 +24,17 @@ export class VacunacionCitaService {
 
   }
   async nuevaCita(nuevacit: VacunacionCita) {
-    console.log('nuevas 26')
+
 
     console.log(nuevacit)
+    let data_nueva_cita:any=nuevacit
 
     let punto_elegidoc = await this.PuntoVacunacionRepositor.findOne({ _NOMBRE_PUNTO_VACUNACION_: nuevacit.NOMBRE_PUNTO_VACUNACION })
 
     let orden = Math.trunc((punto_elegidoc.CUPO_ACTUAL % (punto_elegidoc.CUPOS_HORA * 6)) / punto_elegidoc.CUPOS_HORA)
     let orden_dia = Math.trunc(punto_elegidoc.CUPO_ACTUAL / (punto_elegidoc.CUPOS_HORA * 6))
+
+  
 
 
 
@@ -39,14 +43,22 @@ export class VacunacionCitaService {
     let mensaje:any={}
     let fecha = punto_elegidoc.FECHA_ULTIMO_CUPO
 
-    let fecha_respuesta = punto_elegidoc.FECHA_INICIO_PROGRAMA
+    let fecha_respuesta =new Date( punto_elegidoc.FECHA_INICIO_PROGRAMA)
+typeof(fecha_respuesta)
 
-    if (punto_elegidoc.FORMA_CITA = 'PPHA') {
+    if( punto_elegidoc.FORMA_CITA =='PPHA_DNI'){
+orden_dia=moment(data_nueva_cita.FECHA_CITA).diff(fecha_respuesta,'days')
+
+
+    }
+
+
+    if (punto_elegidoc.FORMA_CITA =='PPHA' || punto_elegidoc.FORMA_CITA =='PPHA_DNI') {
       let adap: any = nuevacit
       orden = adap.CITA.ORDEN_HORA
       orden_dia = adap.CITA.ORDEN_DIA
     }
-    if (punto_elegidoc.FORMA_CITA == 'PPH' || punto_elegidoc.FORMA_CITA == 'PPHA') {
+    if (punto_elegidoc.FORMA_CITA == 'PPH' || punto_elegidoc.FORMA_CITA == 'PPHA' || punto_elegidoc.FORMA_CITA =='PPHA_DNI') {
 
 
       if (orden == 0) {
@@ -82,14 +94,28 @@ export class VacunacionCitaService {
         mensaje = { intervalo: 'DE 2 PM A 3 PM' }
 
       }
-console.log(fecha_respuesta.getFullYear())
+
 
       mensaje.fecha = moment([fecha_respuesta.getFullYear(), fecha_respuesta.getMonth(), fecha_respuesta.getDate()]).add('day',orden_dia).toDate()
+
+      if(punto_elegidoc.FORMA_CITA =='PPHA_DNI'){
+        mensaje.fecha=new Date(data_nueva_cita.FECHA_CITA.year,data_nueva_cita.FECHA_CITA.month,data_nueva_cita.FECHA_CITA.day)
+
+        console.log( 'linea 106')
+        console.log(  mensaje.fecha.getDate())
+
+      }
 
       nuevo.FECHA_CITA = mensaje.fecha
       nuevo.HORARIO_CITA = mensaje.intervalo
 
       let link = "https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message=GORECAJ  Sr(a) " + nuevacit.ape_paterno + " " + nuevacit.ape_materno + " " + nuevacit.nombres + " con dni " + nuevacit.numero_documento + ". Su cita  para la vacunacion Anticovid es para el dia " + fecha_respuesta.getDate() + "/" + (fecha_respuesta.getMonth() + 1).toString() + "/" + fecha_respuesta.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1"
+
+
+      if(punto_elegidoc.FORMA_CITA =='PPHA_DNI'){
+        link = "https://apitellit.aldeamo.com/SmsiWS/smsSendGet?mobile=" + nuevacit.NUMERO_TELEFONO + "&country=51&message=GORECAJ  Sr(a) " + nuevacit.ape_paterno + " " + nuevacit.ape_materno + " " + nuevacit.nombres + " con dni " + nuevacit.numero_documento + ". Su cita  para la vacunacion Anticovid es para el dia " + mensaje.fecha.getDate() + "/" + (   mensaje.fecha.getMonth()).toString() + "/" +  mensaje.fecha.getFullYear() + mensaje.intervalo + " en el punto de vacunacion: " + punto_elegidoc._NOMBRE_PUNTO_VACUNACION_ + "  &messageFormat=1"
+
+      }
 
       if (nuevacit.NUMERO_TELEFONO == '942149115') {
 
@@ -163,15 +189,22 @@ console.log(fecha_respuesta.getFullYear())
       vacunacion_adap.FECHA_NACIMIENTO = moment([vacunacion_adap.FECHA_NACIMIENTO.year, vacunacion_adap.FECHA_NACIMIENTO.month-1, vacunacion_adap.FECHA_NACIMIENTO.day]).add(1,'day').toDate()
 
     }
-    vacunacion_adap.FECHA_CITA = moment([nuevo.FECHA_CITA.getFullYear(), nuevo.FECHA_CITA.getMonth(), nuevo.FECHA_CITA.getDate()]).add(1, 'day').toDate()
+
+    if (vacunacion_adap.FECHA_CITA.day != undefined) {
+      vacunacion_adap.FECHA_CITA = moment([vacunacion_adap.FECHA_CITA.year, vacunacion_adap.FECHA_CITA.month-1, vacunacion_adap.FECHA_CITA.day]).add(1,'day').toDate()
+
+    }
+
+
+
+
+    vacunacion_adap.FECHA_CITA = moment([nuevo.FECHA_CITA.getFullYear(), nuevo.FECHA_CITA.getMonth(), nuevo.FECHA_CITA.getDate()]).toDate()
 
     vacunacion_adap.EDAD = vacunacion_adap.edad
 
     vacunacion_adap.ORDEN_DIA = vacunacion_adap.CITA.ORDEN_DIA
     vacunacion_adap.ORDEN_HORA = vacunacion_adap.CITA.ORDEN_HORA
-    console.log('lineaa 169')
 
-    console.log(vacunacion_adap)
 
     let nuevo_guard = await this.citarepo.save(vacunacion_adap)
 
@@ -229,7 +262,7 @@ console.log(fecha_respuesta.getFullYear())
 
 
       data.edad = moment([fecha_actual.getFullYear(), fecha_actual.getMonth(), fecha_actual.getDate()]).diff(data.FECHA_NACIMIENTO, 'years')
-      console.log(data)
+
 
 
       resp = await this.actuadata.save(data)
