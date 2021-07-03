@@ -54,6 +54,8 @@ export class PadronVacunadosService {
       }
 
       datos_reniec = await this.devolverReniecData(dni)
+      console.log('57')
+      console.log(datos_reniec)
 
       let edad_descripcion: any = {}
 
@@ -81,6 +83,8 @@ export class PadronVacunadosService {
             FECHA_NACIMIENTO: fec_nac_reniec,
 
          }
+         console.log('84')
+         console.log(daatos)
 
          edad_descripcion.anios = diffDuration.years()
          edad_descripcion.meses = diffDuration.months()
@@ -198,11 +202,11 @@ if(datos_vacunas.dosis_programar==2){
            "sec-fetch-mode": "cors",
            "sec-fetch-site": "same-origin",
            "x-requested-with": "XMLHttpRequest",
-           "cookie": "JSESSIONID=7EF659A0090F9F456C834D85E02733AA; _ga_F4HY3YK7EH=GS1.1.1613481795.4.0.1613481795.0; _ga_LEDF527D3S=GS1.1.1615149485.2.0.1615149485.0; _ga_NWVQ3HSJKS=GS1.1.1616246531.42.0.1616246531.0; _ga_T513LTCYK1=GS1.1.1619054927.32.0.1619054927.0; _ga=GA1.3.1150659243.1611596987; _gid=GA1.3.1356648993.1624043395; byt=5c42d15f5749800aec8a575c7e1a60fd748cb43f5bde60bf2e09c9e0f611e031c6018d111d159c1b03127a5b5148acc8f009c48e8b352edf16519e3cc29e5640445897e41c8acb705e7432f4c7ebaa7a970d9742e034d2563be5b6ade99dea75"
+           "cookie": "JSESSIONID=542E50CE236B55D4E8243C44137A1B5F; _ga_F4HY3YK7EH=GS1.1.1613481795.4.0.1613481795.0; _ga_LEDF527D3S=GS1.1.1615149485.2.0.1615149485.0; _ga_NWVQ3HSJKS=GS1.1.1616246531.42.0.1616246531.0; _ga_T513LTCYK1=GS1.1.1619054927.32.0.1619054927.0; _ga=GA1.3.1150659243.1611596987; _gid=GA1.3.180952267.1625156230; rxVisitor=16253368120216OENDME37P60173DQD0QCQ293NL2343Q; dtSa=-; dtLatC=2; dtCookie=3$4138FA12C46BE8B4E05ED6CFCA0FEBD9|HISMINSA|1|RUM+Default+Application|1; dtPC=3$538586536_568h-vFHBNNMEGLCGLLJMGIDAIIGNOKPBIPPPM; rxvt=1625357206018|1625355406018; byt=d4accbf1df7ca4f7050d5062cc75b30b748cb43f5bde60bf88bf50d34b83eb081a924c54026ea40da5489229849d9017361e9ab0197f10ccce347e24721c6bc7689e8cc534eda574ce0d42d9b35b39cc1dc122ad599724db"
          },
          "referrer": "https://websalud.minsa.gob.pe/hisminsa/",
          "referrerPolicy": "strict-origin-when-cross-origin",
-         "body": "C=PACIENTE&S=INFOGETBYIDRENIEC&idtipodoc=1&numdoc="+dni,
+         "body": "C=PACIENTE&S=INFOGETBYID&idtipodoc=1&numdoc=27247106",
          "method": "POST",
          "mode": "cors"
        });
