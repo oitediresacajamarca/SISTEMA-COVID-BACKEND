@@ -206,7 +206,7 @@ if(datos_vacunas.dosis_programar==2){
          },
          "referrer": "https://websalud.minsa.gob.pe/hisminsa/",
          "referrerPolicy": "strict-origin-when-cross-origin",
-         "body": "C=PACIENTE&S=INFOGETBYID&idtipodoc=1&numdoc=27247106",
+         "body": "C=PACIENTE&S=INFOGETBYID&idtipodoc=1&numdoc="+dni,
          "method": "POST",
          "mode": "cors"
        });
