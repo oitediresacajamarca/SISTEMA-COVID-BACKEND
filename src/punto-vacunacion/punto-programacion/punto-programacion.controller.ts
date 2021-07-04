@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { PuntoVacunacionService } from '../punto-vacunacion.service';
 import { PuntoProgramacionService } from './punto-programacion.service';
 
@@ -25,6 +25,14 @@ export class PuntoProgramacionController {
 
      
         let resp = await this.programacion.devolver_programados_punto(nombre_punto);
+        return resp
+
+    }
+
+    @Post('fecha_punto')
+    async devolver_prgramacion_punto_fecha(@Body() body){
+
+        let resp = await this.programacion.devolver_programados_punto_fecha(body.nombre_punto,body.fecha);
         return resp
 
     }

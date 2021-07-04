@@ -5,7 +5,7 @@ import { PuntoProgramacionRepository } from './punto-programacion.repository';
 @Injectable()
 export class PuntoProgramacionService {
 
-    constructor(private punto_program:PuntoProgramacionRepository){
+    constructor(private punto_program:PuntoProgramacionRepository,private cuposrep:CuposDisponiblesRepository){
 
     }
 
@@ -31,6 +31,21 @@ export class PuntoProgramacionService {
         let resp=await this.punto_program.find({
        // FECHA_PROGRAMACION:fecha_cita ,
             NOMBRE_PUNTO_VACUNACION:nombre_punto})
+
+      
+        return resp;
+    }
+
+    async devolver_programados_punto_fecha(nombre_punto:string,fecha:any){
+
+        console.log(fecha)
+        let fechas=new Date(fecha.year,fecha.month-1,fecha.day)
+  
+
+        let resp=await this.cuposrep.find({
+  
+        NOMBRE_PUNTO_VACUNACION    :nombre_punto,
+        FECHA_CITA:fechas.getFullYear().toString()+'-'+(fechas.getMonth()+1).toString()+'-'+fechas.getDate().toString()})
 
       
         return resp;
