@@ -1,5 +1,5 @@
 import { Get, Injectable, MethodNotAllowedException } from '@nestjs/common';
-import { Console } from 'console';
+
 import { getMaxListeners } from 'process';
 import { databaseProviders } from 'src/database.providers';
 import { PadronVacunadosRepository } from 'src/padron-vacunados/padron-vacunados.repository';
@@ -101,8 +101,7 @@ orden_dia=moment(data_nueva_cita.FECHA_CITA).diff(fecha_respuesta,'days')
       if(punto_elegidoc.FORMA_CITA =='PPHA_DNI'){
         mensaje.fecha=new Date(data_nueva_cita.FECHA_CITA.year,data_nueva_cita.FECHA_CITA.month,data_nueva_cita.FECHA_CITA.day)
 
-        console.log( 'linea 106')
-        console.log(  mensaje.fecha.getDate())
+
 
       }
 

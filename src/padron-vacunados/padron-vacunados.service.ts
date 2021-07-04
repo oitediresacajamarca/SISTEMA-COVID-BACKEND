@@ -54,8 +54,7 @@ export class PadronVacunadosService {
       }
 
       datos_reniec = await this.devolverReniecData(dni)
-      console.log('57')
-      console.log(datos_reniec)
+   
 
       let edad_descripcion: any = {}
 
@@ -83,8 +82,7 @@ export class PadronVacunadosService {
             FECHA_NACIMIENTO: fec_nac_reniec,
 
          }
-         console.log('84')
-         console.log(daatos)
+     
 
          edad_descripcion.anios = diffDuration.years()
          edad_descripcion.meses = diffDuration.months()
@@ -103,11 +101,11 @@ export class PadronVacunadosService {
       }
       let datos_cita = await this.devolverCitasPendientes(dni)
       let datos_vacunas = await this.devolverVacunasHis(dni)
-      console.log(datos_vacunas)
+    
 
       var ultimoCaracter = daatos.Numero_de_Documento.charAt(daatos.Numero_de_Documento.length - 1);
 
-      console.log(ultimoCaracter)
+ 
       if(datos_vacunas.dosis_programar==1|| datos_vacunas.dosis_programar==2){
       if(ultimoCaracter=='0'||ultimoCaracter=='1'||ultimoCaracter=='2'||ultimoCaracter=='3'){
        
@@ -130,8 +128,7 @@ export class PadronVacunadosService {
 if(datos_vacunas.dosis_programar==2){
    let fecha_siguiente_dosis=dat.mensaje.fecha_asignada
    if(moment(fecha_siguiente_dosis).diff(datos_vacunas.fecha_dosis_siguiente,'days')>=0){
-     /*  console.log('129')
-      console.log(fecha_siguiente_dosis)*/
+
 
       dat.mensaje.fecha_asignada=dat.mensaje.fecha_asignada
 
